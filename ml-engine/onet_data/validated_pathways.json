@@ -1,0 +1,1651 @@
+[
+  {
+    "profile_id": "ml_engineer",
+    "name": "ML Engineer",
+    "label": "Computer Operator \u2192 Software Developer",
+    "skills_to_learn": 7,
+    "time_reduction": 80.0,
+    "hallucination_rate": 0.0,
+    "enriched_pathway": [
+      {
+        "step": 1,
+        "skill": "Operations Analysis",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "PS-005",
+          "title": "Operations Research and Process Analysis",
+          "duration_hrs": 12,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 2,
+        "skill": "Critical Thinking",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "CG-001",
+          "title": "Critical Thinking and Problem Analysis",
+          "duration_hrs": 6,
+          "provider": "Coursera",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 3,
+        "skill": "Mathematics",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "BC-005",
+          "title": "Applied Mathematics for Professionals",
+          "duration_hrs": 10,
+          "provider": "Khan Academy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 4,
+        "skill": "Programming",
+        "gap_score": 0.97,
+        "course": {
+          "course_id": "TC-001",
+          "title": "Programming Fundamentals",
+          "duration_hrs": 20,
+          "provider": "freeCodeCamp",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 5,
+        "skill": "Complex Problem Solving",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "PS-001",
+          "title": "Structured Problem Solving Techniques",
+          "duration_hrs": 8,
+          "provider": "edX",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 6,
+        "skill": "Science",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "BC-006",
+          "title": "Scientific Thinking and Research Methods",
+          "duration_hrs": 8,
+          "provider": "edX",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 7,
+        "skill": "Technology Design",
+        "gap_score": 0.63,
+        "course": {
+          "course_id": "TC-002",
+          "title": "Technology and System Design Principles",
+          "duration_hrs": 15,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      }
+    ],
+    "reasoning_trace": [
+      {
+        "step": 1,
+        "skill": "Operations Analysis",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Complex Problem Solving"
+        ],
+        "unlocks": [
+          "Programming"
+        ],
+        "reason": "Prerequisite -- learn before: Programming."
+      },
+      {
+        "step": 2,
+        "skill": "Critical Thinking",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [],
+        "unlocks": [
+          "Complex Problem Solving"
+        ],
+        "reason": "Prerequisite -- learn before: Complex Problem Solving."
+      },
+      {
+        "step": 3,
+        "skill": "Mathematics",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [],
+        "unlocks": [
+          "Science"
+        ],
+        "reason": "Prerequisite -- learn before: Science."
+      },
+      {
+        "step": 4,
+        "skill": "Programming",
+        "gap_score": 0.97,
+        "is_prereq": false,
+        "prerequisites": [
+          "Operations Analysis"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.97. Builds on: Operations Analysis."
+      },
+      {
+        "step": 5,
+        "skill": "Complex Problem Solving",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [
+          "Operations Analysis"
+        ],
+        "reason": "Prerequisite -- learn before: Operations Analysis."
+      },
+      {
+        "step": 6,
+        "skill": "Science",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Mathematics"
+        ],
+        "unlocks": [
+          "Technology Design"
+        ],
+        "reason": "Prerequisite -- learn before: Technology Design."
+      },
+      {
+        "step": 7,
+        "skill": "Technology Design",
+        "gap_score": 0.63,
+        "is_prereq": false,
+        "prerequisites": [
+          "Science"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.63. Builds on: Science."
+      }
+    ]
+  },
+  {
+    "profile_id": "data_scientist",
+    "name": "Data Scientist",
+    "label": "Bookkeeping Clerk \u2192 Business Intelligence Analyst",
+    "skills_to_learn": 13,
+    "time_reduction": 62.9,
+    "hallucination_rate": 0.0,
+    "enriched_pathway": [
+      {
+        "step": 1,
+        "skill": "Active Listening",
+        "gap_score": 0.3,
+        "course": {
+          "course_id": "BC-002",
+          "title": "Active Listening and Communication Skills",
+          "duration_hrs": 3,
+          "provider": "LinkedIn Learning",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 2,
+        "skill": "Critical Thinking",
+        "gap_score": 0.3,
+        "course": {
+          "course_id": "CG-001",
+          "title": "Critical Thinking and Problem Analysis",
+          "duration_hrs": 6,
+          "provider": "Coursera",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 3,
+        "skill": "Reading Comprehension",
+        "gap_score": 0.42,
+        "course": {
+          "course_id": "BC-001",
+          "title": "Professional Reading and Comprehension",
+          "duration_hrs": 4,
+          "provider": "Coursera",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 4,
+        "skill": "Social Perceptiveness",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "SS-001",
+          "title": "Emotional Intelligence at Work",
+          "duration_hrs": 5,
+          "provider": "LinkedIn Learning",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 5,
+        "skill": "Coordination",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "SS-002",
+          "title": "Cross-functional Team Coordination",
+          "duration_hrs": 6,
+          "provider": "Udemy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 6,
+        "skill": "Speaking",
+        "gap_score": 0.45,
+        "course": {
+          "course_id": "BC-004",
+          "title": "Public Speaking and Presentation Skills",
+          "duration_hrs": 6,
+          "provider": "Udemy",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 7,
+        "skill": "Judgment and Decision Making",
+        "gap_score": 0.59,
+        "course": {
+          "course_id": "PS-002",
+          "title": "Decision Making Under Uncertainty",
+          "duration_hrs": 6,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 8,
+        "skill": "Systems Analysis",
+        "gap_score": 0.79,
+        "course": {
+          "course_id": "PS-003",
+          "title": "Systems Thinking and Analysis",
+          "duration_hrs": 10,
+          "provider": "edX",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 9,
+        "skill": "Active Learning",
+        "gap_score": 0.85,
+        "course": {
+          "course_id": "CG-002",
+          "title": "Learning How to Learn",
+          "duration_hrs": 4,
+          "provider": "Coursera",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 10,
+        "skill": "Learning Strategies",
+        "gap_score": 0.8,
+        "course": {
+          "course_id": "CG-003",
+          "title": "Effective Learning Strategies for Professionals",
+          "duration_hrs": 5,
+          "provider": "LinkedIn Learning",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 11,
+        "skill": "Writing",
+        "gap_score": 0.32,
+        "course": {
+          "course_id": "BC-003",
+          "title": "Business Writing Essentials",
+          "duration_hrs": 5,
+          "provider": "Coursera",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 12,
+        "skill": "Instructing",
+        "gap_score": 0.67,
+        "course": {
+          "course_id": "SS-003",
+          "title": "Training and Instructional Design",
+          "duration_hrs": 8,
+          "provider": "Coursera",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 13,
+        "skill": "Systems Evaluation",
+        "gap_score": 0.79,
+        "course": {
+          "course_id": "PS-004",
+          "title": "System Evaluation and Performance Assessment",
+          "duration_hrs": 8,
+          "provider": "LinkedIn Learning",
+          "level": "advanced"
+        },
+        "grounded": true
+      }
+    ],
+    "reasoning_trace": [
+      {
+        "step": 1,
+        "skill": "Active Listening",
+        "gap_score": 0.3,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [
+          "Speaking",
+          "Social Perceptiveness"
+        ],
+        "reason": "Gap score 0.30. No prerequisites needed."
+      },
+      {
+        "step": 2,
+        "skill": "Critical Thinking",
+        "gap_score": 0.3,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [
+          "Judgment and Decision Making",
+          "Systems Analysis"
+        ],
+        "reason": "Gap score 0.30. No prerequisites needed."
+      },
+      {
+        "step": 3,
+        "skill": "Reading Comprehension",
+        "gap_score": 0.42,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [
+          "Active Learning",
+          "Learning Strategies",
+          "Writing"
+        ],
+        "reason": "Gap score 0.42. No prerequisites needed."
+      },
+      {
+        "step": 4,
+        "skill": "Social Perceptiveness",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Active Listening"
+        ],
+        "unlocks": [
+          "Coordination"
+        ],
+        "reason": "Prerequisite -- learn before: Coordination."
+      },
+      {
+        "step": 5,
+        "skill": "Coordination",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Social Perceptiveness"
+        ],
+        "unlocks": [
+          "Instructing"
+        ],
+        "reason": "Prerequisite -- learn before: Instructing."
+      },
+      {
+        "step": 6,
+        "skill": "Speaking",
+        "gap_score": 0.45,
+        "is_prereq": false,
+        "prerequisites": [
+          "Active Listening"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.45. Builds on: Active Listening."
+      },
+      {
+        "step": 7,
+        "skill": "Judgment and Decision Making",
+        "gap_score": 0.59,
+        "is_prereq": false,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.59. Builds on: Critical Thinking."
+      },
+      {
+        "step": 8,
+        "skill": "Systems Analysis",
+        "gap_score": 0.79,
+        "is_prereq": false,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [
+          "Systems Evaluation"
+        ],
+        "reason": "Gap score 0.79. Builds on: Critical Thinking."
+      },
+      {
+        "step": 9,
+        "skill": "Active Learning",
+        "gap_score": 0.85,
+        "is_prereq": false,
+        "prerequisites": [
+          "Reading Comprehension"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.85. Builds on: Reading Comprehension."
+      },
+      {
+        "step": 10,
+        "skill": "Learning Strategies",
+        "gap_score": 0.8,
+        "is_prereq": false,
+        "prerequisites": [
+          "Reading Comprehension"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.80. Builds on: Reading Comprehension."
+      },
+      {
+        "step": 11,
+        "skill": "Writing",
+        "gap_score": 0.32,
+        "is_prereq": false,
+        "prerequisites": [
+          "Reading Comprehension"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.32. Builds on: Reading Comprehension."
+      },
+      {
+        "step": 12,
+        "skill": "Instructing",
+        "gap_score": 0.67,
+        "is_prereq": false,
+        "prerequisites": [
+          "Coordination"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.67. Builds on: Coordination."
+      },
+      {
+        "step": 13,
+        "skill": "Systems Evaluation",
+        "gap_score": 0.79,
+        "is_prereq": false,
+        "prerequisites": [
+          "Systems Analysis"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.79. Builds on: Systems Analysis."
+      }
+    ]
+  },
+  {
+    "profile_id": "devops_engineer",
+    "name": "DevOps Engineer",
+    "label": "IT Support \u2192 Network & Systems Admin",
+    "skills_to_learn": 18,
+    "time_reduction": 48.6,
+    "hallucination_rate": 0.0,
+    "enriched_pathway": [
+      {
+        "step": 1,
+        "skill": "Mathematics",
+        "gap_score": 0.52,
+        "course": {
+          "course_id": "BC-005",
+          "title": "Applied Mathematics for Professionals",
+          "duration_hrs": 10,
+          "provider": "Khan Academy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 2,
+        "skill": "Monitoring",
+        "gap_score": 0.32,
+        "course": {
+          "course_id": "CG-004",
+          "title": "Performance Monitoring and Metrics",
+          "duration_hrs": 4,
+          "provider": "Udemy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 3,
+        "skill": "Science",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "BC-006",
+          "title": "Scientific Thinking and Research Methods",
+          "duration_hrs": 8,
+          "provider": "edX",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 4,
+        "skill": "Critical Thinking",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "CG-001",
+          "title": "Critical Thinking and Problem Analysis",
+          "duration_hrs": 6,
+          "provider": "Coursera",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 5,
+        "skill": "Technology Design",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "TC-002",
+          "title": "Technology and System Design Principles",
+          "duration_hrs": 15,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 6,
+        "skill": "Judgment and Decision Making",
+        "gap_score": 0.3,
+        "course": {
+          "course_id": "PS-002",
+          "title": "Decision Making Under Uncertainty",
+          "duration_hrs": 6,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 7,
+        "skill": "Systems Analysis",
+        "gap_score": 0.58,
+        "course": {
+          "course_id": "PS-003",
+          "title": "Systems Thinking and Analysis",
+          "duration_hrs": 10,
+          "provider": "edX",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 8,
+        "skill": "Time Management",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "MG-001",
+          "title": "Time Management and Productivity",
+          "duration_hrs": 4,
+          "provider": "LinkedIn Learning",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 9,
+        "skill": "Complex Problem Solving",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "PS-001",
+          "title": "Structured Problem Solving Techniques",
+          "duration_hrs": 8,
+          "provider": "edX",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 10,
+        "skill": "Equipment Selection",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "TC-003",
+          "title": "Equipment Selection and Procurement",
+          "duration_hrs": 6,
+          "provider": "Udemy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 11,
+        "skill": "Systems Evaluation",
+        "gap_score": 0.58,
+        "course": {
+          "course_id": "PS-004",
+          "title": "System Evaluation and Performance Assessment",
+          "duration_hrs": 8,
+          "provider": "LinkedIn Learning",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 12,
+        "skill": "Operations Analysis",
+        "gap_score": 0.5,
+        "course": {
+          "course_id": "PS-005",
+          "title": "Operations Research and Process Analysis",
+          "duration_hrs": 12,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 13,
+        "skill": "Management of Personnel Resources",
+        "gap_score": 0.38,
+        "course": {
+          "course_id": "MG-002",
+          "title": "People Management Essentials",
+          "duration_hrs": 12,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 14,
+        "skill": "Installation",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "TC-004",
+          "title": "System Installation and Configuration",
+          "duration_hrs": 8,
+          "provider": "LinkedIn Learning",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 15,
+        "skill": "Programming",
+        "gap_score": 1.14,
+        "course": {
+          "course_id": "TC-001",
+          "title": "Programming Fundamentals",
+          "duration_hrs": 20,
+          "provider": "freeCodeCamp",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 16,
+        "skill": "Equipment Maintenance",
+        "gap_score": 0.67,
+        "course": {
+          "course_id": "TC-005",
+          "title": "Preventive Maintenance Fundamentals",
+          "duration_hrs": 6,
+          "provider": "Udemy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 17,
+        "skill": "Troubleshooting",
+        "gap_score": 0.45,
+        "course": {
+          "course_id": "TC-006",
+          "title": "Systematic Troubleshooting Methods",
+          "duration_hrs": 8,
+          "provider": "LinkedIn Learning",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 18,
+        "skill": "Repairing",
+        "gap_score": 0.67,
+        "course": {
+          "course_id": "TC-007",
+          "title": "Technical Repair and Maintenance",
+          "duration_hrs": 10,
+          "provider": "Udemy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      }
+    ],
+    "reasoning_trace": [
+      {
+        "step": 1,
+        "skill": "Mathematics",
+        "gap_score": 0.52,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [
+          "Science"
+        ],
+        "reason": "Gap score 0.52. No prerequisites needed."
+      },
+      {
+        "step": 2,
+        "skill": "Monitoring",
+        "gap_score": 0.32,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [],
+        "reason": "Gap score 0.32. No prerequisites needed."
+      },
+      {
+        "step": 3,
+        "skill": "Science",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Mathematics"
+        ],
+        "unlocks": [
+          "Technology Design"
+        ],
+        "reason": "Prerequisite -- learn before: Technology Design."
+      },
+      {
+        "step": 4,
+        "skill": "Critical Thinking",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [],
+        "unlocks": [
+          "Judgment and Decision Making",
+          "Complex Problem Solving",
+          "Systems Analysis",
+          "Time Management"
+        ],
+        "reason": "Prerequisite -- learn before: Judgment and Decision Making, Complex Problem Solving, Systems Analysis, Time Management."
+      },
+      {
+        "step": 5,
+        "skill": "Technology Design",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Science"
+        ],
+        "unlocks": [
+          "Equipment Selection"
+        ],
+        "reason": "Prerequisite -- learn before: Equipment Selection."
+      },
+      {
+        "step": 6,
+        "skill": "Judgment and Decision Making",
+        "gap_score": 0.3,
+        "is_prereq": false,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.30. Builds on: Critical Thinking."
+      },
+      {
+        "step": 7,
+        "skill": "Systems Analysis",
+        "gap_score": 0.58,
+        "is_prereq": false,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [
+          "Systems Evaluation"
+        ],
+        "reason": "Gap score 0.58. Builds on: Critical Thinking."
+      },
+      {
+        "step": 8,
+        "skill": "Time Management",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [
+          "Management of Personnel Resources"
+        ],
+        "reason": "Prerequisite -- learn before: Management of Personnel Resources."
+      },
+      {
+        "step": 9,
+        "skill": "Complex Problem Solving",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [
+          "Operations Analysis"
+        ],
+        "reason": "Prerequisite -- learn before: Operations Analysis."
+      },
+      {
+        "step": 10,
+        "skill": "Equipment Selection",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Technology Design"
+        ],
+        "unlocks": [
+          "Installation",
+          "Management of Personnel Resources"
+        ],
+        "reason": "Prerequisite -- learn before: Installation, Management of Personnel Resources."
+      },
+      {
+        "step": 11,
+        "skill": "Systems Evaluation",
+        "gap_score": 0.58,
+        "is_prereq": false,
+        "prerequisites": [
+          "Systems Analysis"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.58. Builds on: Systems Analysis."
+      },
+      {
+        "step": 12,
+        "skill": "Operations Analysis",
+        "gap_score": 0.5,
+        "is_prereq": false,
+        "prerequisites": [
+          "Complex Problem Solving"
+        ],
+        "unlocks": [
+          "Programming"
+        ],
+        "reason": "Gap score 0.50. Builds on: Complex Problem Solving."
+      },
+      {
+        "step": 13,
+        "skill": "Management of Personnel Resources",
+        "gap_score": 0.38,
+        "is_prereq": false,
+        "prerequisites": [
+          "Time Management",
+          "Equipment Selection"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.38. Builds on: Time Management, Equipment Selection."
+      },
+      {
+        "step": 14,
+        "skill": "Installation",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Equipment Selection"
+        ],
+        "unlocks": [
+          "Equipment Maintenance"
+        ],
+        "reason": "Prerequisite -- learn before: Equipment Maintenance."
+      },
+      {
+        "step": 15,
+        "skill": "Programming",
+        "gap_score": 1.14,
+        "is_prereq": false,
+        "prerequisites": [
+          "Operations Analysis"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.14. Builds on: Operations Analysis."
+      },
+      {
+        "step": 16,
+        "skill": "Equipment Maintenance",
+        "gap_score": 0.67,
+        "is_prereq": false,
+        "prerequisites": [
+          "Installation"
+        ],
+        "unlocks": [
+          "Troubleshooting"
+        ],
+        "reason": "Gap score 0.67. Builds on: Installation."
+      },
+      {
+        "step": 17,
+        "skill": "Troubleshooting",
+        "gap_score": 0.45,
+        "is_prereq": false,
+        "prerequisites": [
+          "Equipment Maintenance"
+        ],
+        "unlocks": [
+          "Repairing"
+        ],
+        "reason": "Gap score 0.45. Builds on: Equipment Maintenance."
+      },
+      {
+        "step": 18,
+        "skill": "Repairing",
+        "gap_score": 0.67,
+        "is_prereq": false,
+        "prerequisites": [
+          "Troubleshooting"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.67. Builds on: Troubleshooting."
+      }
+    ]
+  },
+  {
+    "profile_id": "warehouse_ops",
+    "name": "Warehouse Ops Lead",
+    "label": "Warehouse Associate \u2192 Operations Manager",
+    "skills_to_learn": 26,
+    "time_reduction": 25.7,
+    "hallucination_rate": 0.0,
+    "enriched_pathway": [
+      {
+        "step": 1,
+        "skill": "Reading Comprehension",
+        "gap_score": 1.0,
+        "course": {
+          "course_id": "BC-001",
+          "title": "Professional Reading and Comprehension",
+          "duration_hrs": 4,
+          "provider": "Coursera",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 2,
+        "skill": "Active Listening",
+        "gap_score": 0.75,
+        "course": {
+          "course_id": "BC-002",
+          "title": "Active Listening and Communication Skills",
+          "duration_hrs": 3,
+          "provider": "LinkedIn Learning",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 3,
+        "skill": "Critical Thinking",
+        "gap_score": 1.13,
+        "course": {
+          "course_id": "CG-001",
+          "title": "Critical Thinking and Problem Analysis",
+          "duration_hrs": 6,
+          "provider": "Coursera",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 4,
+        "skill": "Monitoring",
+        "gap_score": 1.12,
+        "course": {
+          "course_id": "CG-004",
+          "title": "Performance Monitoring and Metrics",
+          "duration_hrs": 4,
+          "provider": "Udemy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 5,
+        "skill": "Mathematics",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "BC-005",
+          "title": "Applied Mathematics for Professionals",
+          "duration_hrs": 10,
+          "provider": "Khan Academy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 6,
+        "skill": "Active Learning",
+        "gap_score": 1.24,
+        "course": {
+          "course_id": "CG-002",
+          "title": "Learning How to Learn",
+          "duration_hrs": 4,
+          "provider": "Coursera",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 7,
+        "skill": "Learning Strategies",
+        "gap_score": 0.75,
+        "course": {
+          "course_id": "CG-003",
+          "title": "Effective Learning Strategies for Professionals",
+          "duration_hrs": 5,
+          "provider": "LinkedIn Learning",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 8,
+        "skill": "Writing",
+        "gap_score": 1.0,
+        "course": {
+          "course_id": "BC-003",
+          "title": "Business Writing Essentials",
+          "duration_hrs": 5,
+          "provider": "Coursera",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 9,
+        "skill": "Speaking",
+        "gap_score": 1.12,
+        "course": {
+          "course_id": "BC-004",
+          "title": "Public Speaking and Presentation Skills",
+          "duration_hrs": 6,
+          "provider": "Udemy",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 10,
+        "skill": "Social Perceptiveness",
+        "gap_score": 0.87,
+        "course": {
+          "course_id": "SS-001",
+          "title": "Emotional Intelligence at Work",
+          "duration_hrs": 5,
+          "provider": "LinkedIn Learning",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 11,
+        "skill": "Judgment and Decision Making",
+        "gap_score": 1.0,
+        "course": {
+          "course_id": "PS-002",
+          "title": "Decision Making Under Uncertainty",
+          "duration_hrs": 6,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 12,
+        "skill": "Complex Problem Solving",
+        "gap_score": 1.37,
+        "course": {
+          "course_id": "PS-001",
+          "title": "Structured Problem Solving Techniques",
+          "duration_hrs": 8,
+          "provider": "edX",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 13,
+        "skill": "Systems Analysis",
+        "gap_score": 0.74,
+        "course": {
+          "course_id": "PS-003",
+          "title": "Systems Thinking and Analysis",
+          "duration_hrs": 10,
+          "provider": "edX",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 14,
+        "skill": "Time Management",
+        "gap_score": 1.0,
+        "course": {
+          "course_id": "MG-001",
+          "title": "Time Management and Productivity",
+          "duration_hrs": 4,
+          "provider": "LinkedIn Learning",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 15,
+        "skill": "Science",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "BC-006",
+          "title": "Scientific Thinking and Research Methods",
+          "duration_hrs": 8,
+          "provider": "edX",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 16,
+        "skill": "Coordination",
+        "gap_score": 1.13,
+        "course": {
+          "course_id": "SS-002",
+          "title": "Cross-functional Team Coordination",
+          "duration_hrs": 6,
+          "provider": "Udemy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 17,
+        "skill": "Systems Evaluation",
+        "gap_score": 0.87,
+        "course": {
+          "course_id": "PS-004",
+          "title": "System Evaluation and Performance Assessment",
+          "duration_hrs": 8,
+          "provider": "LinkedIn Learning",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 18,
+        "skill": "Technology Design",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "TC-002",
+          "title": "Technology and System Design Principles",
+          "duration_hrs": 15,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 19,
+        "skill": "Instructing",
+        "gap_score": 0.75,
+        "course": {
+          "course_id": "SS-003",
+          "title": "Training and Instructional Design",
+          "duration_hrs": 8,
+          "provider": "Coursera",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 20,
+        "skill": "Negotiation",
+        "gap_score": 1.38,
+        "course": {
+          "course_id": "SS-004",
+          "title": "Negotiation Fundamentals",
+          "duration_hrs": 6,
+          "provider": "Yale / Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 21,
+        "skill": "Persuasion",
+        "gap_score": 1.37,
+        "course": {
+          "course_id": "SS-005",
+          "title": "Influence and Persuasion in Business",
+          "duration_hrs": 5,
+          "provider": "LinkedIn Learning",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 22,
+        "skill": "Equipment Selection",
+        "gap_score": 0.0,
+        "course": {
+          "course_id": "TC-003",
+          "title": "Equipment Selection and Procurement",
+          "duration_hrs": 6,
+          "provider": "Udemy",
+          "level": "intermediate"
+        },
+        "grounded": true
+      },
+      {
+        "step": 23,
+        "skill": "Service Orientation",
+        "gap_score": 0.37,
+        "course": {
+          "course_id": "SS-006",
+          "title": "Customer and Service Excellence",
+          "duration_hrs": 4,
+          "provider": "Udemy",
+          "level": "beginner"
+        },
+        "grounded": true
+      },
+      {
+        "step": 24,
+        "skill": "Management of Personnel Resources",
+        "gap_score": 1.37,
+        "course": {
+          "course_id": "MG-002",
+          "title": "People Management Essentials",
+          "duration_hrs": 12,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 25,
+        "skill": "Management of Financial Resources",
+        "gap_score": 1.38,
+        "course": {
+          "course_id": "MG-003",
+          "title": "Financial Management for Non-Finance Managers",
+          "duration_hrs": 10,
+          "provider": "edX",
+          "level": "advanced"
+        },
+        "grounded": true
+      },
+      {
+        "step": 26,
+        "skill": "Management of Material Resources",
+        "gap_score": 1.24,
+        "course": {
+          "course_id": "MG-004",
+          "title": "Resource and Supply Chain Management",
+          "duration_hrs": 8,
+          "provider": "Coursera",
+          "level": "advanced"
+        },
+        "grounded": true
+      }
+    ],
+    "reasoning_trace": [
+      {
+        "step": 1,
+        "skill": "Reading Comprehension",
+        "gap_score": 1.0,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [
+          "Active Learning",
+          "Learning Strategies",
+          "Writing"
+        ],
+        "reason": "Gap score 1.00. No prerequisites needed."
+      },
+      {
+        "step": 2,
+        "skill": "Active Listening",
+        "gap_score": 0.75,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [
+          "Speaking",
+          "Social Perceptiveness"
+        ],
+        "reason": "Gap score 0.75. No prerequisites needed."
+      },
+      {
+        "step": 3,
+        "skill": "Critical Thinking",
+        "gap_score": 1.13,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [
+          "Judgment and Decision Making",
+          "Complex Problem Solving",
+          "Systems Analysis",
+          "Time Management"
+        ],
+        "reason": "Gap score 1.13. No prerequisites needed."
+      },
+      {
+        "step": 4,
+        "skill": "Monitoring",
+        "gap_score": 1.12,
+        "is_prereq": false,
+        "prerequisites": [],
+        "unlocks": [],
+        "reason": "Gap score 1.12. No prerequisites needed."
+      },
+      {
+        "step": 5,
+        "skill": "Mathematics",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [],
+        "unlocks": [
+          "Science"
+        ],
+        "reason": "Prerequisite -- learn before: Science."
+      },
+      {
+        "step": 6,
+        "skill": "Active Learning",
+        "gap_score": 1.24,
+        "is_prereq": false,
+        "prerequisites": [
+          "Reading Comprehension"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.24. Builds on: Reading Comprehension."
+      },
+      {
+        "step": 7,
+        "skill": "Learning Strategies",
+        "gap_score": 0.75,
+        "is_prereq": false,
+        "prerequisites": [
+          "Reading Comprehension"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.75. Builds on: Reading Comprehension."
+      },
+      {
+        "step": 8,
+        "skill": "Writing",
+        "gap_score": 1.0,
+        "is_prereq": false,
+        "prerequisites": [
+          "Reading Comprehension"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.00. Builds on: Reading Comprehension."
+      },
+      {
+        "step": 9,
+        "skill": "Speaking",
+        "gap_score": 1.12,
+        "is_prereq": false,
+        "prerequisites": [
+          "Active Listening"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.12. Builds on: Active Listening."
+      },
+      {
+        "step": 10,
+        "skill": "Social Perceptiveness",
+        "gap_score": 0.87,
+        "is_prereq": false,
+        "prerequisites": [
+          "Active Listening"
+        ],
+        "unlocks": [
+          "Coordination"
+        ],
+        "reason": "Gap score 0.87. Builds on: Active Listening."
+      },
+      {
+        "step": 11,
+        "skill": "Judgment and Decision Making",
+        "gap_score": 1.0,
+        "is_prereq": false,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.00. Builds on: Critical Thinking."
+      },
+      {
+        "step": 12,
+        "skill": "Complex Problem Solving",
+        "gap_score": 1.37,
+        "is_prereq": false,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.37. Builds on: Critical Thinking."
+      },
+      {
+        "step": 13,
+        "skill": "Systems Analysis",
+        "gap_score": 0.74,
+        "is_prereq": false,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [
+          "Systems Evaluation"
+        ],
+        "reason": "Gap score 0.74. Builds on: Critical Thinking."
+      },
+      {
+        "step": 14,
+        "skill": "Time Management",
+        "gap_score": 1.0,
+        "is_prereq": false,
+        "prerequisites": [
+          "Critical Thinking"
+        ],
+        "unlocks": [
+          "Management of Personnel Resources"
+        ],
+        "reason": "Gap score 1.00. Builds on: Critical Thinking."
+      },
+      {
+        "step": 15,
+        "skill": "Science",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Mathematics"
+        ],
+        "unlocks": [
+          "Technology Design"
+        ],
+        "reason": "Prerequisite -- learn before: Technology Design."
+      },
+      {
+        "step": 16,
+        "skill": "Coordination",
+        "gap_score": 1.13,
+        "is_prereq": false,
+        "prerequisites": [
+          "Social Perceptiveness"
+        ],
+        "unlocks": [
+          "Instructing",
+          "Negotiation",
+          "Persuasion"
+        ],
+        "reason": "Gap score 1.13. Builds on: Social Perceptiveness."
+      },
+      {
+        "step": 17,
+        "skill": "Systems Evaluation",
+        "gap_score": 0.87,
+        "is_prereq": false,
+        "prerequisites": [
+          "Systems Analysis"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.87. Builds on: Systems Analysis."
+      },
+      {
+        "step": 18,
+        "skill": "Technology Design",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Science"
+        ],
+        "unlocks": [
+          "Equipment Selection"
+        ],
+        "reason": "Prerequisite -- learn before: Equipment Selection."
+      },
+      {
+        "step": 19,
+        "skill": "Instructing",
+        "gap_score": 0.75,
+        "is_prereq": false,
+        "prerequisites": [
+          "Coordination"
+        ],
+        "unlocks": [
+          "Service Orientation"
+        ],
+        "reason": "Gap score 0.75. Builds on: Coordination."
+      },
+      {
+        "step": 20,
+        "skill": "Negotiation",
+        "gap_score": 1.38,
+        "is_prereq": false,
+        "prerequisites": [
+          "Coordination"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.38. Builds on: Coordination."
+      },
+      {
+        "step": 21,
+        "skill": "Persuasion",
+        "gap_score": 1.37,
+        "is_prereq": false,
+        "prerequisites": [
+          "Coordination"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.37. Builds on: Coordination."
+      },
+      {
+        "step": 22,
+        "skill": "Equipment Selection",
+        "gap_score": 0,
+        "is_prereq": true,
+        "prerequisites": [
+          "Technology Design"
+        ],
+        "unlocks": [
+          "Management of Personnel Resources"
+        ],
+        "reason": "Prerequisite -- learn before: Management of Personnel Resources."
+      },
+      {
+        "step": 23,
+        "skill": "Service Orientation",
+        "gap_score": 0.37,
+        "is_prereq": false,
+        "prerequisites": [
+          "Instructing"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 0.37. Builds on: Instructing."
+      },
+      {
+        "step": 24,
+        "skill": "Management of Personnel Resources",
+        "gap_score": 1.37,
+        "is_prereq": false,
+        "prerequisites": [
+          "Time Management",
+          "Equipment Selection"
+        ],
+        "unlocks": [
+          "Management of Financial Resources",
+          "Management of Material Resources"
+        ],
+        "reason": "Gap score 1.37. Builds on: Time Management, Equipment Selection."
+      },
+      {
+        "step": 25,
+        "skill": "Management of Financial Resources",
+        "gap_score": 1.38,
+        "is_prereq": false,
+        "prerequisites": [
+          "Management of Personnel Resources"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.38. Builds on: Management of Personnel Resources."
+      },
+      {
+        "step": 26,
+        "skill": "Management of Material Resources",
+        "gap_score": 1.24,
+        "is_prereq": false,
+        "prerequisites": [
+          "Management of Personnel Resources"
+        ],
+        "unlocks": [],
+        "reason": "Gap score 1.24. Builds on: Management of Personnel Resources."
+      }
+    ]
+  }
+]

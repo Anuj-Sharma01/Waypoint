@@ -1,0 +1,254 @@
+[
+  {
+    "id": "py_fundamentals",
+    "title": "Python Fundamentals",
+    "domain": "tech",
+    "hours": 8,
+    "description": "Core Python syntax, data structures, OOP, and file I/O.",
+    "prerequisites": [],
+    "tags": ["python", "programming", "basics"]
+  },
+  {
+    "id": "py_advanced",
+    "title": "Advanced Python Patterns",
+    "domain": "tech",
+    "hours": 6,
+    "description": "Decorators, generators, async/await, context managers, and typing.",
+    "prerequisites": ["py_fundamentals"],
+    "tags": ["python", "async", "advanced"]
+  },
+  {
+    "id": "sql_fundamentals",
+    "title": "SQL & Relational Databases",
+    "domain": "tech",
+    "hours": 6,
+    "description": "SELECT, JOIN, aggregations, indexing, and query optimization basics.",
+    "prerequisites": [],
+    "tags": ["sql", "databases", "data"]
+  },
+  {
+    "id": "linear_algebra",
+    "title": "Linear Algebra for ML",
+    "domain": "tech",
+    "hours": 8,
+    "description": "Vectors, matrices, eigenvalues, and matrix operations using NumPy.",
+    "prerequisites": ["py_fundamentals"],
+    "tags": ["math", "linear algebra", "numpy", "ml prerequisite"]
+  },
+  {
+    "id": "statistics",
+    "title": "Statistics & Probability",
+    "domain": "tech",
+    "hours": 6,
+    "description": "Distributions, hypothesis testing, Bayesian inference, and confidence intervals.",
+    "prerequisites": [],
+    "tags": ["statistics", "probability", "math", "ml prerequisite"]
+  },
+  {
+    "id": "pandas_numpy",
+    "title": "Pandas & NumPy for Data Manipulation",
+    "domain": "tech",
+    "hours": 6,
+    "description": "DataFrames, vectorized operations, merging, reshaping, and time series.",
+    "prerequisites": ["py_fundamentals", "sql_fundamentals"],
+    "tags": ["pandas", "numpy", "data manipulation"]
+  },
+  {
+    "id": "feature_engineering",
+    "title": "Feature Engineering & Pipelines",
+    "domain": "tech",
+    "hours": 10,
+    "description": "Encoding, imputation, scaling, feature selection, and sklearn Pipelines.",
+    "prerequisites": ["pandas_numpy", "statistics"],
+    "tags": ["feature engineering", "sklearn", "data science"]
+  },
+  {
+    "id": "sklearn_ml",
+    "title": "Scikit-learn: Core ML Patterns",
+    "domain": "tech",
+    "hours": 10,
+    "description": "Supervised and unsupervised algorithms, cross-validation, and hyperparameter tuning.",
+    "prerequisites": ["feature_engineering", "linear_algebra"],
+    "tags": ["scikit-learn", "machine learning", "classification", "regression"]
+  },
+  {
+    "id": "model_evaluation",
+    "title": "Model Evaluation & Validation",
+    "domain": "tech",
+    "hours": 6,
+    "description": "AUC-ROC, precision/recall, learning curves, confusion matrices, and business metrics.",
+    "prerequisites": ["sklearn_ml", "statistics"],
+    "tags": ["model evaluation", "metrics", "validation"]
+  },
+  {
+    "id": "pytorch_fundamentals",
+    "title": "PyTorch Fundamentals",
+    "domain": "tech",
+    "hours": 12,
+    "description": "Tensors, autograd, nn.Module, training loops, and GPU acceleration.",
+    "prerequisites": ["linear_algebra", "py_advanced"],
+    "tags": ["pytorch", "deep learning", "neural networks"]
+  },
+  {
+    "id": "transformers",
+    "title": "Transformers & Modern LLM Architecture",
+    "domain": "tech",
+    "hours": 14,
+    "description": "Attention mechanisms, positional encoding, BERT, GPT, and fine-tuning with HuggingFace.",
+    "prerequisites": ["pytorch_fundamentals"],
+    "tags": ["transformers", "llm", "nlp", "huggingface"]
+  },
+  {
+    "id": "mlops",
+    "title": "MLOps: MLflow, Docker & CI/CD",
+    "domain": "tech",
+    "hours": 8,
+    "description": "Experiment tracking, model registry, containerization, and automated deployment pipelines.",
+    "prerequisites": ["model_evaluation", "docker_fundamentals"],
+    "tags": ["mlops", "mlflow", "docker", "ci/cd", "deployment"]
+  },
+  {
+    "id": "ab_testing",
+    "title": "A/B Testing & Statistical Significance",
+    "domain": "tech",
+    "hours": 6,
+    "description": "Experiment design, power analysis, p-values, and causal inference frameworks.",
+    "prerequisites": ["statistics", "model_evaluation"],
+    "tags": ["a/b testing", "statistics", "experimentation"]
+  },
+  {
+    "id": "nlp_fundamentals",
+    "title": "NLP Fundamentals with HuggingFace",
+    "domain": "tech",
+    "hours": 10,
+    "description": "Tokenization, embeddings, text classification, NER, and sentiment analysis.",
+    "prerequisites": ["pytorch_fundamentals"],
+    "tags": ["nlp", "huggingface", "text", "embeddings"]
+  },
+  {
+    "id": "docker_fundamentals",
+    "title": "Docker Deep Dive",
+    "domain": "tech",
+    "hours": 6,
+    "description": "Images, containers, volumes, networking, multi-stage builds, and Docker Compose.",
+    "prerequisites": [],
+    "tags": ["docker", "containers", "devops"]
+  },
+  {
+    "id": "kubernetes",
+    "title": "Kubernetes: Workloads & Networking",
+    "domain": "tech",
+    "hours": 16,
+    "description": "Pods, deployments, services, ingress, ConfigMaps, RBAC, and Helm charts.",
+    "prerequisites": ["docker_fundamentals"],
+    "tags": ["kubernetes", "k8s", "devops", "orchestration"]
+  },
+  {
+    "id": "terraform",
+    "title": "Terraform: Infrastructure as Code",
+    "domain": "tech",
+    "hours": 10,
+    "description": "HCL syntax, providers, state management, modules, and cloud resource provisioning.",
+    "prerequisites": [],
+    "tags": ["terraform", "iac", "devops", "cloud"]
+  },
+  {
+    "id": "cicd",
+    "title": "CI/CD Pipelines: GitHub Actions & ArgoCD",
+    "domain": "tech",
+    "hours": 8,
+    "description": "Pipeline design, GitOps patterns, blue-green deployments, and rollback strategies.",
+    "prerequisites": ["docker_fundamentals"],
+    "tags": ["ci/cd", "github actions", "gitops", "devops"]
+  },
+  {
+    "id": "observability",
+    "title": "Prometheus, Grafana & Observability",
+    "domain": "tech",
+    "hours": 8,
+    "description": "Metrics, alerting, dashboards, distributed tracing, and SRE fundamentals.",
+    "prerequisites": ["kubernetes"],
+    "tags": ["prometheus", "grafana", "monitoring", "sre"]
+  },
+  {
+    "id": "people_management",
+    "title": "Fundamentals of People Management",
+    "domain": "operational",
+    "hours": 8,
+    "description": "Conflict resolution, performance conversations, coaching, team motivation, and delegation.",
+    "prerequisites": [],
+    "tags": ["management", "leadership", "hr", "team"]
+  },
+  {
+    "id": "wms_advanced",
+    "title": "WMS Software: Advanced Workflows",
+    "domain": "operational",
+    "hours": 6,
+    "description": "Receiving, putaway optimization, cycle count procedures, and exception handling.",
+    "prerequisites": [],
+    "tags": ["wms", "warehouse", "inventory"]
+  },
+  {
+    "id": "sap_wm",
+    "title": "SAP Warehouse Management (WM/EWM)",
+    "domain": "operational",
+    "hours": 12,
+    "description": "SAP WM/EWM navigation, transfer orders, inventory management, and reporting.",
+    "prerequisites": ["wms_advanced"],
+    "tags": ["sap", "warehouse", "erp", "operations"]
+  },
+  {
+    "id": "lean_six_sigma",
+    "title": "Lean Six Sigma: Yellow Belt",
+    "domain": "operational",
+    "hours": 10,
+    "description": "DMAIC methodology, waste identification, process mapping, and control charts.",
+    "prerequisites": [],
+    "tags": ["lean", "six sigma", "process improvement", "operations"]
+  },
+  {
+    "id": "kpi_reporting",
+    "title": "KPI Reporting & Operational Analytics",
+    "domain": "operational",
+    "hours": 6,
+    "description": "OTP, pick accuracy, shrinkage metrics, dashboard creation, and data-driven decisions.",
+    "prerequisites": ["lean_six_sigma"],
+    "tags": ["kpi", "analytics", "reporting", "warehouse"]
+  },
+  {
+    "id": "loss_prevention",
+    "title": "Loss Prevention & Shrink Reduction",
+    "domain": "operational",
+    "hours": 4,
+    "description": "Asset protection strategies, security protocols, and audit procedures.",
+    "prerequisites": [],
+    "tags": ["loss prevention", "security", "warehouse", "compliance"]
+  },
+  {
+    "id": "supply_chain",
+    "title": "Supply Chain Fundamentals",
+    "domain": "operational",
+    "hours": 8,
+    "description": "Demand forecasting, vendor management, procurement cycles, and logistics coordination.",
+    "prerequisites": [],
+    "tags": ["supply chain", "logistics", "procurement", "operations"]
+  },
+  {
+    "id": "sales_fundamentals",
+    "title": "Enterprise Sales Fundamentals",
+    "domain": "business",
+    "hours": 8,
+    "description": "Consultative selling, discovery calls, objection handling, and deal qualification (MEDDIC).",
+    "prerequisites": [],
+    "tags": ["sales", "enterprise", "crm", "business development"]
+  },
+  {
+    "id": "crm_salesforce",
+    "title": "CRM & Salesforce Essentials",
+    "domain": "business",
+    "hours": 6,
+    "description": "Pipeline management, forecasting, activity logging, and Salesforce reports.",
+    "prerequisites": ["sales_fundamentals"],
+    "tags": ["salesforce", "crm", "sales", "pipeline"]
+  }
+]

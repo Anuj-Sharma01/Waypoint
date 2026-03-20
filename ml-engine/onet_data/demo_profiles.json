@@ -1,0 +1,50 @@
+[
+  {
+    "id": "ml_engineer",
+    "name": "ML Engineer",
+    "emoji": "🤖",
+    "current_role": "Data Analyst",
+    "target_role": "Machine Learning Engineer",
+    "current_soc": "15-2051.01",
+    "target_soc": "15-1252.00",
+    "proficiency_boost": 0.5,
+    "description": "Analyst transitioning to ML engineering — strong data skills, needs systems and programming depth.",
+    "resume_text": "Alex Chen | Data Analyst | 3 years experience\n\nEXPERIENCE\nData Analyst, DataCorp (2021–2024)\n- Strong proficiency in Python and SQL for data pipeline development\n- Advanced experience with statistical analysis and quantitative modeling\n- Developed KPI monitoring dashboards using Tableau and Power BI\n- Familiar with machine learning concepts, exposure to scikit-learn\n- Collaborated cross-functionally with engineering and product teams\n- Working knowledge of data visualization and business reporting\n- 2 years experience with Excel, financial modeling, and forecasting\n- Comfortable with Jupyter notebooks and exploratory data analysis\n\nEDUCATION\nB.Sc. Mathematics and Computer Science\nStrong foundation in linear algebra, calculus, and algorithms"
+  },
+  {
+    "id": "data_scientist",
+    "name": "Data Scientist",
+    "emoji": "📊",
+    "current_role": "Junior Software Developer",
+    "target_role": "Data Scientist",
+    "current_soc": "15-1252.00",
+    "target_soc": "15-2051.01",
+    "proficiency_boost": 0.45,
+    "description": "Junior dev transitioning to data science — solid coding base, needs statistics and analytics depth.",
+    "resume_text": "Priya Sharma | Junior Software Developer | 2 years\n\nEXPERIENCE\nJunior Software Developer, StartupXYZ (2022–2024)\n- Working knowledge of Python, JavaScript, and REST APIs\n- Some experience with databases and SQL queries\n- Assisted in building backend services and microservices\n- Familiar with version control using Git and GitHub\n- Basic understanding of algorithms and data structures\n- Entry level exposure to cloud platforms (AWS, GCP)\n- Contributed to code reviews and team standups\n- Learning agile methodology and sprint planning\n\nEDUCATION\nB.Sc. Computer Science\nIntroductory coursework in statistics and probability"
+  },
+  {
+    "id": "devops_engineer",
+    "name": "DevOps Engineer",
+    "emoji": "⚙️",
+    "current_role": "IT Support Specialist",
+    "target_role": "DevOps Engineer",
+    "current_soc": "15-1232.00",
+    "target_soc": "15-1244.00",
+    "proficiency_boost": 0.4,
+    "description": "IT support moving to DevOps — good troubleshooting foundation, needs infrastructure and automation skills.",
+    "resume_text": "Rahul Mehta | IT Support Specialist | 4 years\n\nEXPERIENCE\nIT Support Specialist, EnterpriseIT (2020–2024)\n- Advanced troubleshooting of hardware, software, and network issues\n- Proficient in Windows and Linux system administration\n- Strong experience with installation and configuration of software\n- Managed equipment maintenance and system monitoring\n- Responsible for incident response and root cause analysis\n- 3 years experience with helpdesk ticketing systems (Jira, ServiceNow)\n- Working knowledge of networking protocols and TCP/IP\n- Basic scripting experience in PowerShell and Bash\n- Assisted in server setup, configuration, and deployment\n\nEDUCATION\nDiploma in Information Technology\nCertifications: CompTIA A+, CompTIA Network+"
+  },
+  {
+    "id": "warehouse_ops",
+    "name": "Warehouse Ops Lead",
+    "emoji": "📦",
+    "current_role": "Warehouse Associate",
+    "target_role": "Operations Manager",
+    "current_soc": "53-7065.00",
+    "target_soc": "11-1021.00",
+    "proficiency_boost": 0.2,
+    "description": "Warehouse worker moving to operations management — strong floor knowledge, needs leadership and financial skills.",
+    "resume_text": "Sunita Rao | Warehouse Associate | 5 years\n\nEXPERIENCE\nSenior Warehouse Associate, LogisticsPro (2019–2024)\n- Responsible for inventory management, stock replenishment, and order fulfillment\n- Led small team of 3 associates during peak shifts (informal leadership)\n- Basic reporting of daily stock levels and discrepancies to supervisor\n- Some experience with warehouse management software (WMS)\n- Coordinated with delivery drivers for inbound and outbound shipments\n- Followed quality checks and safety compliance procedures\n- Entry level experience with budget tracking for department supplies\n- Worked with team members to meet daily throughput targets\n- Basic math for inventory counts and reconciliation\n\nEDUCATION\nHigh School Diploma\nShort course in Warehouse Operations and Safety"
+  }
+]
