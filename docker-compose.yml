@@ -1,4 +1,4 @@
-version: "3.9"
+version: '3.9'
 
 services:
   backend:
@@ -9,18 +9,30 @@ services:
       - "8000:8000"
     env_file:
       - ./waypoint-backend/.env
-    volumes:
-      - ./waypoint-backend:/app
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   frontend:
     build:
-      context: ./waypoint-frontend
+      context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "5173:5173"
     environment:
       - VITE_API_URL=http://localhost:8000
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     restart: unless-stopped
+
+# HOW TO RUN:
+# 1. git clone https://github.com/Anuj-Sharma01/Waypoint.git
+# 2. cd Waypoint
+# 3. echo "GROQ_API_KEY=gsk_your_key_here" > waypoint-backend/.env
+# 4. docker-compose up --build
+# 5. Frontend → http://localhost:5173
+#    Backend  → http://localhost:8000/docs
