@@ -1,26 +1,24 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Upload, FileText, Briefcase, ArrowRight, Loader2, AlertCircle } from 'lucide-react'
+import { analyzeGap } from '../api'
 
-const MOCK_RESULT = {
-  name: 'Demo User', targetRole: 'ML Engineer',
-  currentSkills: ['Python', 'SQL', 'Data Analysis', 'Excel', 'Statistics'],
-  gapSkills: ['PyTorch', 'MLOps', 'Docker', 'LLM Fine-tuning', 'Feature Engineering'],
-  pathway: [
-    { id:1, title:'PyTorch Fundamentals',        provider:'Fast.ai',        duration:'12h', prereqs:[],                                                             reason:'Foundational tensor ops required before MLOps tooling.',                    confidence:0.94, questions:[{q:'Have you built a neural network from scratch in PyTorch?',weight:.6},{q:'Do you understand autograd and backpropagation in code?',weight:.4}] },
-    { id:2, title:'Feature Engineering',          provider:'Kaggle',         duration:'6h',  prereqs:['PyTorch Fundamentals'],                                       reason:'Bridges existing Statistics skill to model-ready inputs.',                   confidence:0.91, questions:[{q:'Can you explain target encoding and when to use it?',weight:.5},{q:'Have you handled missing data in a real project?',weight:.5}] },
-    { id:3, title:'Docker for Data Scientists',   provider:'DataCamp',       duration:'8h',  prereqs:['PyTorch Fundamentals'],                                       reason:'Prerequisite for all MLOps pipeline construction.',                         confidence:0.89, questions:[{q:'Have you written a Dockerfile for a Python ML project?',weight:.6},{q:'Do you know how Docker Compose volumes work?',weight:.4}] },
-    { id:4, title:'MLOps Zoomcamp',               provider:'DataTalks.Club', duration:'20h', prereqs:['Docker for Data Scientists','Feature Engineering'],           reason:'Combines all prior skills into a production deployment workflow.',           confidence:0.87, questions:[{q:'Have you set up experiment tracking with MLflow?',weight:.5},{q:'Can you explain model versioning and deployment pipelines?',weight:.5}] },
-  ],
-}
+const LOADING_MESSAGES = [
+  'Extracting skills from resume…',
+  'Building prerequisite graph…',
+  'Running Dijkstra gap traversal…',
+  'Grounding modules to catalog…',
+  'Generating reasoning traces…',
+]
 
 export default function UploadPage() {
   const [resumeText, setResumeText] = useState('')
-  const [jdText, setJdText] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
+  const [jdText, setJdText]         = useState('')
+  const [loading, setLoading]       = useState(false)
+  const [error, setError]           = useState('')
   const [resumeFile, setResumeFile] = useState(null)
-  const fileRef = useRef()
+  const [loadingMsg, setLoadingMsg] = useState('')
+  const fileRef  = useRef()
   const navigate = useNavigate()
 
   const handleFileDrop = (e) => {
@@ -34,13 +32,29 @@ export default function UploadPage() {
   }
 
   const handleSubmit = async () => {
-    if (!resumeText.trim() || !jdText.trim()) { setError('Please provide both a resume and a job description.'); return }
-    setError(''); setLoading(true)
+    if (!resumeText.trim()) { setError('Please provide your resume text.'); return }
+    if (!jdText.trim())     { setError('Please provide the job description.'); return }
+    setError('')
+    setLoading(true)
+
+    let msgIdx = 0
+    setLoadingMsg(LOADING_MESSAGES[0])
+    const msgInterval = setInterval(() => {
+      msgIdx = (msgIdx + 1) % LOADING_MESSAGES.length
+      setLoadingMsg(LOADING_MESSAGES[msgIdx])
+    }, 1800)
+
     try {
-      await new Promise(r => setTimeout(r, 2000))
-      navigate('/pathway', { state: { result: MOCK_RESULT } })
-    } catch (err) { setError(err.message || 'Something went wrong.') }
-    finally { setLoading(false) }
+      const result = await analyzeGap(resumeText, jdText)
+      clearInterval(msgInterval)
+      navigate('/pathway', { state: { result } })
+    } catch (err) {
+      clearInterval(msgInterval)
+      setError(err.message || 'Something went wrong. Is the backend running on port 8000?')
+    } finally {
+      setLoading(false)
+      setLoadingMsg('')
+    }
   }
 
   return (
@@ -49,46 +63,70 @@ export default function UploadPage() {
         <h1 className="font-display text-4xl font-800 mb-3 text-ink">
           Analyze your <span className="text-gradient">skill gap</span>
         </h1>
-        <p className="text-dim text-base">Paste your resume and the target job description. WayPoint will extract competencies and compute the shortest learning path.</p>
+        <p className="text-dim text-base">
+          Paste your resume and the target job description. Waypoint will extract
+          competencies and compute the shortest learning path.
+        </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4 mb-4">
+        {/* Resume */}
         <div className="flex flex-col gap-2">
           <label className="flex items-center gap-2 text-sm font-mono text-muted uppercase tracking-wider">
             <FileText size={12} className="text-accentDark" /> Resume
           </label>
-          <div onClick={() => fileRef.current.click()} onDrop={handleFileDrop} onDragOver={e => e.preventDefault()}
+          <div
+            onClick={() => fileRef.current.click()}
+            onDrop={handleFileDrop}
+            onDragOver={e => e.preventDefault()}
             className="group border-2 border-dashed border-softborder rounded-xl p-4 flex items-center gap-3 cursor-pointer hover:border-accent/60 transition-colors bg-white mb-2"
           >
             <Upload size={16} className="text-muted group-hover:text-accentDark transition-colors" />
-            <span className="text-dim text-sm">{resumeFile || 'Drop PDF/TXT or click to upload'}</span>
-            <input ref={fileRef} type="file" accept=".txt,.pdf" className="hidden" onChange={handleFileDrop} />
+            <span className="text-dim text-sm">{resumeFile || 'Drop TXT file or click to upload'}</span>
+            <input ref={fileRef} type="file" accept=".txt" className="hidden" onChange={handleFileDrop} />
           </div>
-          <textarea value={resumeText} onChange={e => setResumeText(e.target.value)} placeholder="...or paste resume text here"
+          <textarea
+            value={resumeText}
+            onChange={e => setResumeText(e.target.value)}
+            placeholder="...or paste resume text here"
             className="flex-1 frosted rounded-xl p-4 text-sm text-ink placeholder:text-muted font-body focus:outline-none focus:border-accent/50 resize-none min-h-60 shadow-sm"
           />
         </div>
+
+        {/* Job Description */}
         <div className="flex flex-col gap-2">
           <label className="flex items-center gap-2 text-sm font-mono text-muted uppercase tracking-wider">
             <Briefcase size={12} className="text-skyDark" /> Job Description
           </label>
-          <textarea value={jdText} onChange={e => setJdText(e.target.value)} placeholder="Paste the target job description here..."
+          <textarea
+            value={jdText}
+            onChange={e => setJdText(e.target.value)}
+            placeholder={`Start with the job title on the first line, e.g:\n\nJava Developer\n\nWe are looking for a Java Developer with experience in Spring Boot, Microservices...`}
             className="flex-1 frosted rounded-xl p-4 text-sm text-ink placeholder:text-muted font-body focus:outline-none focus:border-sky/50 resize-none min-h-72 shadow-sm"
           />
         </div>
       </div>
 
       {error && (
-        <div className="flex items-center gap-2 text-accentDark text-sm bg-mintbg border border-softborder rounded-xl p-3 mb-4">
+        <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-xl p-3 mb-4">
           <AlertCircle size={14} />{error}
         </div>
       )}
 
-      <button onClick={handleSubmit} disabled={loading}
-        className="w-full flex items-center justify-center gap-2 py-4 btn-gradient text-white font-display font-700 text-base rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        className="w-full flex items-center justify-center gap-2 py-4 aurora-gradient text-white font-display font-700 text-base rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
       >
-        {loading ? <><Loader2 size={18} className="animate-spin" />Analyzing skill graph…</> : <>Generate Learning Pathway <ArrowRight size={18} /></>}
+        {loading
+          ? <><Loader2 size={18} className="animate-spin" />{loadingMsg}</>
+          : <>Generate Learning Pathway <ArrowRight size={18} /></>
+        }
       </button>
+
+      <p className="text-center text-xs font-mono text-muted mt-4">
+        Tip: Start your job description with the role title on the first line e.g. "Java Developer"
+      </p>
     </div>
   )
 }
