@@ -8,6 +8,7 @@
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=flat&logo=react)](https://react.dev)
 [![Groq](https://img.shields.io/badge/LLM-Llama_3.3_70B-orange?style=flat)](https://groq.com)
+[![NetworkX](https://img.shields.io/badge/Graph-NetworkX-blue?style=flat)](https://networkx.org)
 [![Docker](https://img.shields.io/badge/Docker-ready-2496ED?style=flat&logo=docker)](https://docker.com)
 [![License](https://img.shields.io/badge/license-MIT-green?style=flat)](LICENSE)
 
@@ -147,8 +148,19 @@ Waypoint/
 │           │   └── OnboardingQuiz.jsx # Initial profiling quiz
 │           └── api.js                 # All backend API calls
 │
-├── ml-engine/                         # O*NET skill taxonomy + validation
+├── ml-engine/                         # O*NET skill taxonomy + validation pipeline
+│   ├── onet_loader.py                 # Downloads + loads O*NET v30.2 Excel files
+│   ├── build_skill_dag.py             # Builds prerequisite DAG from O*NET data
+│   ├── proficiency_estimator.py       # Resume text → proficiency scores 0.0–1.0
+│   ├── hallucination_validator.py     # Validates all recommendations against catalog
+│   ├── demo_profiles.py               # Test personas for validation
+│   └── onet_data/
+│       ├── skill_dag.pkl              # Serialised NetworkX DAG (O*NET-derived)
+│       ├── validated_pathways.json    # Pre-validated pathway outputs
+│       └── demo_profiles.json        # Demo candidate profiles
+│
 ├── docker-compose.yml
+├── SETUP.md
 └── README.md
 ```
 
@@ -259,6 +271,62 @@ Key differentiators:
 
 ---
 
+## 🔬 ML Engine (`ml-engine/`)
+
+The `ml-engine` folder contains the offline data processing and validation pipeline that underpins WayPoint's adaptive logic. It was built separately from the backend to keep concerns clean and is run once during development to generate the artifacts the backend uses.
+
+### `onet_loader.py` — O*NET Data Loader
+Downloads Skills, Task Statements, Occupation Data, Job Zones, and Technology Skills directly from O*NET Online (v30.2) into local Excel files. Loads them into pandas DataFrames for downstream processing.
+
+```bash
+pip install pandas openpyxl requests
+python ml-engine/onet_loader.py
+```
+
+### `build_skill_dag.py` — Prerequisite DAG Builder
+Reads the O*NET Skills and Job Zones data, builds a skill importance matrix across all SOC occupations, and constructs a directed acyclic graph (DAG) where edges represent prerequisite relationships — lower-complexity skills point to higher-complexity dependent skills. Serialises the final graph to `onet_data/skill_dag.pkl` for use by `graph_service.py`.
+
+```bash
+python ml-engine/build_skill_dag.py
+# Output: ml-engine/onet_data/skill_dag.pkl
+```
+
+### `proficiency_estimator.py` — Resume Proficiency Scorer
+Extracts skills from raw resume text and assigns a proficiency score (0.0–1.0) per skill using layered keyword signals:
+
+| Tier | Score | Signals |
+|------|-------|---------|
+| Expert | 0.9 | "led", "architect", "10+ years", "principal" |
+| Advanced | 0.7 | "built", "designed", "5+ years", "proficient" |
+| Intermediate | 0.5 | "developed", "worked with", "2–3 years" |
+| Beginner | 0.3 | "familiar", "basic", "learning", "exposure" |
+
+These scores feed directly into the `estimated_savings_pct` calculation — a proficiency of 0.7 compresses the module by 35%, a score of 0.9 skips it entirely.
+
+```bash
+python ml-engine/proficiency_estimator.py
+```
+
+### `hallucination_validator.py` — Zero Hallucination Enforcer
+Validates every module recommended by the pathway engine against the locked course catalog. Any module ID not present in the catalog is rejected before the response is returned. This is what guarantees the **0% hallucination rate** claimed in our metrics.
+
+Also contains fixed demo profiles (ML Engineer, Warehouse Lead, Java Developer) used for end-to-end validation testing.
+
+```bash
+python ml-engine/hallucination_validator.py
+# Prints: validation report + hallucination rate
+```
+
+### `demo_profiles.py` — Test Personas
+Generates and validates three canonical test personas against the full pipeline:
+- **Persona 1** — Junior Dev → ML Engineer (tech domain)
+- **Persona 2** — Logistics Coordinator → Warehouse Lead (operational domain)
+- **Persona 3** — Python Dev → Java Developer (cross-language)
+
+Results saved to `onet_data/validated_pathways.json`.
+
+---
+
 ## 📊 Datasets Used
 
 | Dataset | Source | Usage |
@@ -308,7 +376,7 @@ GROQ_API_KEY=gsk_your_key_here    # Required — get free at console.groq.com
 
 ## 🎬 Demo Video
 
-[Watch the 2-minute demo →](#)  ← *add your YouTube link here*
+[Watch the demo →](#)  ← *add your YouTube link here*
 
 ---
 
