@@ -80,8 +80,8 @@ Resume (PDF/TXT) + Job Description
 git clone https://github.com/Anuj-Sharma01/Waypoint.git
 cd Waypoint
 
-# Add your Groq API key (free at console.groq.com)
-echo "GROQ_API_KEY=gsk_your_key_here" > waypoint-backend/.env
+# Add your Groq API key (free at console.groq.com) or use the one we've provided as it is
+echo "GROQ_API_KEY=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" > waypoint-backend/.env
 
 # Run everything
 docker-compose up --build
