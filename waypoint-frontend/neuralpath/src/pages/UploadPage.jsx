@@ -109,6 +109,7 @@ export default function UploadPage() {
       clearInterval(msgInterval)
       // Persist result so any page (Skill Test, Courses, etc.) can read real skills
       localStorage.setItem('waypoint_result', JSON.stringify(result))
+      sessionStorage.setItem('waypoint_result', JSON.stringify(result))
       navigate('/pathway', { state: { result } })
     } catch (err) {
       clearInterval(msgInterval)

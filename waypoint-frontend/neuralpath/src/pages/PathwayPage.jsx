@@ -152,7 +152,7 @@ function ModuleCard({ module, index, moduleState, onComplete, onSkip, onAnswer, 
 export default function PathwayPage() {
   const { state } = useLocation()
   const navigate  = useNavigate()
-  const result    = state?.result
+  const result    = state?.result || JSON.parse(sessionStorage.getItem('waypoint_result') || 'null')
   const pathway   = result?.pathway || []
 
   const [moduleStates, setModuleStates] = useState(() =>
