@@ -14,7 +14,7 @@ import { generateNextAdaptiveQuestion } from '../api'
 // ─── Read real skills from stored gap analysis ────────────────────────────────
 function getAnalysisSkills() {
   try {
-    const raw = localStorage.getItem('waypoint_result')
+    const raw = sessionStorage.getItem('waypoint_result')
     if (!raw) return null
     const r = JSON.parse(raw)
     return {
