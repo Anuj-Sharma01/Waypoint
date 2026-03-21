@@ -9,6 +9,8 @@ const NAV = [
   { to: '/quiz',       label: 'Quiz'        },
   { to: '/score',      label: 'Resume Score'},
   { to: '/demo',       label: 'Demo'        },
+  { to: '/test',       label: 'Skill Test'  },   // ★ NEW
+  { to: '/courses',    label: 'Courses'     },   // ★ NEW
 ]
 
 export default function Layout() {
