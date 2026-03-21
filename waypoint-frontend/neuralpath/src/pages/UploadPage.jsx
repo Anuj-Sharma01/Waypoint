@@ -1,7 +1,8 @@
 import { useState, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Upload, FileText, Briefcase, ArrowRight, Loader2, AlertCircle } from 'lucide-react'
-import { analyzeGap } from '../api'
+
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 const LOADING_MESSAGES = [
   'Extracting skills from resume…',
@@ -11,12 +12,30 @@ const LOADING_MESSAGES = [
   'Generating reasoning traces…',
 ]
 
+function extractRoleFromJD(jdText) {
+  if (!jdText || !jdText.trim()) return 'Software Engineer'
+  const lines = jdText.trim().split('\n').filter(l => l.trim())
+  for (const line of lines.slice(0, 5)) {
+    const clean = line.trim()
+    const lower = clean.toLowerCase()
+    if (lower.includes('role:') || lower.includes('position:') || lower.includes('title:')) {
+      const after = clean.split(':')[1]?.trim()
+      if (after) return after
+    }
+    if (clean.length < 60 && !clean.includes('.') && !clean.includes(',')) {
+      return clean
+    }
+  }
+  return lines[0]?.trim().slice(0, 60) || 'Software Engineer'
+}
+
 export default function UploadPage() {
   const [resumeText, setResumeText] = useState('')
   const [jdText, setJdText]         = useState('')
   const [loading, setLoading]       = useState(false)
   const [error, setError]           = useState('')
   const [resumeFile, setResumeFile] = useState(null)
+  const [pdfFile, setPdfFile]       = useState(null)
   const [loadingMsg, setLoadingMsg] = useState('')
   const fileRef  = useRef()
   const navigate = useNavigate()
@@ -26,14 +45,23 @@ export default function UploadPage() {
     const file = e.dataTransfer?.files?.[0] || e.target.files?.[0]
     if (!file) return
     setResumeFile(file.name)
-    const reader = new FileReader()
-    reader.onload = (ev) => setResumeText(ev.target.result)
-    reader.readAsText(file)
+
+    if (file.name.endsWith('.pdf')) {
+      // Store PDF file for backend upload
+      setPdfFile(file)
+      setResumeText('') // clear text box
+    } else {
+      // Read TXT file directly
+      setPdfFile(null)
+      const reader = new FileReader()
+      reader.onload = (ev) => setResumeText(ev.target.result)
+      reader.readAsText(file)
+    }
   }
 
   const handleSubmit = async () => {
-    if (!resumeText.trim()) { setError('Please provide your resume text.'); return }
-    if (!jdText.trim())     { setError('Please provide the job description.'); return }
+    if (!pdfFile && !resumeText.trim()) { setError('Please provide your resume (PDF upload or paste text).'); return }
+    if (!jdText.trim()) { setError('Please provide the job description.'); return }
     setError('')
     setLoading(true)
 
@@ -45,12 +73,44 @@ export default function UploadPage() {
     }, 1800)
 
     try {
-      const result = await analyzeGap(resumeText, jdText)
+      const targetRole = extractRoleFromJD(jdText)
+      let result
+
+      if (pdfFile) {
+        // Send PDF as multipart form
+        const formData = new FormData()
+        formData.append('file', pdfFile)
+        formData.append('target_role', targetRole)
+        formData.append('job_description', jdText)
+
+        const res = await fetch(`${BASE_URL}/pathway`, {
+          method: 'POST',
+          body: formData,
+        })
+        if (!res.ok) throw new Error(await res.text() || `HTTP ${res.status}`)
+        const data = await res.json()
+        result = transformResponse(data)
+      } else {
+        // Send plain text
+        const res = await fetch(`${BASE_URL}/pathway/text`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            resume_text:     resumeText,
+            target_role:     targetRole,
+            job_description: jdText,
+          }),
+        })
+        if (!res.ok) throw new Error(await res.text() || `HTTP ${res.status}`)
+        const data = await res.json()
+        result = transformResponse(data)
+      }
+
       clearInterval(msgInterval)
       navigate('/pathway', { state: { result } })
     } catch (err) {
       clearInterval(msgInterval)
-      setError(err.message || 'Something went wrong. Is the backend running on port 8000?')
+      setError(err.message || 'Something went wrong. Is the backend running?')
     } finally {
       setLoading(false)
       setLoadingMsg('')
@@ -64,13 +124,11 @@ export default function UploadPage() {
           Analyze your <span className="text-gradient">skill gap</span>
         </h1>
         <p className="text-dim text-base">
-          Paste your resume and the target job description. Waypoint will extract
-          competencies and compute the shortest learning path.
+          Upload your resume and paste the job description. Waypoint will compute your shortest learning path.
         </p>
       </div>
 
       <div className="grid md:grid-cols-2 gap-4 mb-4">
-        {/* Resume */}
         <div className="flex flex-col gap-2">
           <label className="flex items-center gap-2 text-sm font-mono text-muted uppercase tracking-wider">
             <FileText size={12} className="text-accentDark" /> Resume
@@ -82,18 +140,23 @@ export default function UploadPage() {
             className="group border-2 border-dashed border-softborder rounded-xl p-4 flex items-center gap-3 cursor-pointer hover:border-accent/60 transition-colors bg-white mb-2"
           >
             <Upload size={16} className="text-muted group-hover:text-accentDark transition-colors" />
-            <span className="text-dim text-sm">{resumeFile || 'Drop TXT file or click to upload'}</span>
-            <input ref={fileRef} type="file" accept=".txt" className="hidden" onChange={handleFileDrop} />
+            <span className="text-dim text-sm">{resumeFile || 'Drop PDF or TXT or click to upload'}</span>
+            <input ref={fileRef} type="file" accept=".txt,.pdf" className="hidden" onChange={handleFileDrop} />
           </div>
-          <textarea
-            value={resumeText}
-            onChange={e => setResumeText(e.target.value)}
-            placeholder="...or paste resume text here"
-            className="flex-1 frosted rounded-xl p-4 text-sm text-ink placeholder:text-muted font-body focus:outline-none focus:border-accent/50 resize-none min-h-60 shadow-sm"
-          />
+          {pdfFile ? (
+            <div className="frosted rounded-xl p-4 text-sm text-accentDark font-mono flex items-center gap-2">
+              ✅ {pdfFile.name} ready to upload
+            </div>
+          ) : (
+            <textarea
+              value={resumeText}
+              onChange={e => { setResumeText(e.target.value); setPdfFile(null); setResumeFile(null) }}
+              placeholder="...or paste resume text here"
+              className="flex-1 frosted rounded-xl p-4 text-sm text-ink placeholder:text-muted font-body focus:outline-none focus:border-accent/50 resize-none min-h-60 shadow-sm"
+            />
+          )}
         </div>
 
-        {/* Job Description */}
         <div className="flex flex-col gap-2">
           <label className="flex items-center gap-2 text-sm font-mono text-muted uppercase tracking-wider">
             <Briefcase size={12} className="text-skyDark" /> Job Description
@@ -101,7 +164,7 @@ export default function UploadPage() {
           <textarea
             value={jdText}
             onChange={e => setJdText(e.target.value)}
-            placeholder={`Start with the job title on the first line, e.g:\n\nJava Developer\n\nWe are looking for a Java Developer with experience in Spring Boot, Microservices...`}
+            placeholder={`Start with the job title on the first line, e.g:\n\nJava Developer\n\nWe are looking for a Java Developer with Spring Boot experience...`}
             className="flex-1 frosted rounded-xl p-4 text-sm text-ink placeholder:text-muted font-body focus:outline-none focus:border-sky/50 resize-none min-h-72 shadow-sm"
           />
         </div>
@@ -125,8 +188,39 @@ export default function UploadPage() {
       </button>
 
       <p className="text-center text-xs font-mono text-muted mt-4">
-        Tip: Start your job description with the role title on the first line e.g. "Java Developer"
+        Tip: Start your job description with the role title on the first line
       </p>
     </div>
   )
+}
+
+function transformResponse(data) {
+  return {
+    name:           'Candidate',
+    targetRole:     data.target_role,
+    currentSkills:  data.existing_skills || [],
+    partialSkills:  data.partial_skills  || [],
+    gapSkills:      data.skill_gaps      || [],
+    totalHours:     data.total_hours,
+    standardHours:  data.standard_hours,
+    timeSavedPct:   data.time_saved_pct,
+    reasoningTrace: data.reasoning_trace || [],
+    pathway: (data.modules || []).map((m, i) => ({
+      id:         i + 1,
+      title:      m.title,
+      module_id:  m.module_id,
+      provider:   'Waypoint',
+      duration:   `${m.hours}h`,
+      prereqs:    [],
+      reason:     m.why_included     || '',
+      skipReason: m.skip_reason      || null,
+      confidence: Math.max(0.75, 0.95 - i * 0.02),
+      priority:   m.priority         || 'CORE GAP',
+      savingsPct: m.estimated_savings_pct || 0,
+      questions: [
+        { q: `Do you already have hands-on experience with ${m.title}?`,     weight: 0.6 },
+        { q: `Can you confidently explain the core concepts of ${m.title}?`, weight: 0.4 },
+      ],
+    })),
+  }
 }
