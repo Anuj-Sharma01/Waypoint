@@ -176,16 +176,30 @@ export default function UploadPage() {
         </div>
       )}
 
-      <button
-        onClick={handleSubmit}
-        disabled={loading}
-        className="w-full flex items-center justify-center gap-2 py-4 bg-accentDark text-white font-display font-700 text-base rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
-      >
-        {loading
-          ? <><Loader2 size={18} className="animate-spin" />{loadingMsg}</>
-          : <>Generate Learning Pathway <ArrowRight size={18} /></>
-        }
-      </button>
+<button
+  onClick={handleSubmit}
+  disabled={loading}
+  style={{ background: 'linear-gradient(135deg, #059669, #0369a1)' }}
+  className="
+    w-full flex items-center justify-center gap-2
+    py-4 rounded-xl shadow-lg
+    text-white font-display font-700 text-base
+    hover:opacity-90 transition-all
+    disabled:opacity-50 disabled:cursor-not-allowed
+  "
+>
+  {loading ? (
+    <>
+      <Loader2 size={18} className="animate-spin" />
+      {loadingMsg}
+    </>
+  ) : (
+    <>
+      Generate Learning Pathway
+      <ArrowRight size={18} />
+    </>
+  )}
+</button>
 
       <p className="text-center text-xs font-mono text-muted mt-4">
         Tip: Start your job description with the role title on the first line
