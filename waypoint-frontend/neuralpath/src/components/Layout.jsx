@@ -8,7 +8,6 @@ const NAV = [
   { to: '/upload',     label: 'Analyze'     },
   { to: '/quiz',       label: 'Quiz'        },
   { to: '/score',      label: 'Resume Score'},
-  { to: '/demo',       label: 'Demo'        },
   { to: '/test',       label: 'Skill Test'  },   // ★ NEW
   { to: '/courses',    label: 'Courses'     },   // ★ NEW
 ]
