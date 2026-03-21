@@ -28,6 +28,11 @@ export async function analyzeGap(resumeText, jobDescription) {
 
   const data = await res.json()
 
+  // Debug: log raw module to confirm course_url is coming from backend
+  if (data.modules && data.modules.length > 0) {
+    console.log('[DEBUG] First module from backend:', JSON.stringify(data.modules[0]))
+  }
+
   return {
     name:           'Candidate',
     targetRole:     data.target_role,
@@ -38,25 +43,30 @@ export async function analyzeGap(resumeText, jobDescription) {
     standardHours:  data.standard_hours,
     timeSavedPct:   data.time_saved_pct,
     reasoningTrace: data.reasoning_trace || [],
-    pathway: (data.modules || []).map((m, i) => ({
-      id:              i + 1,
-      title:           m.title,
-      module_id:       m.module_id,
-      provider:        m.course_provider || 'Coursera',
-      duration:        `${m.hours}h`,
-      prereqs:         [],
-      reason:          m.why_included          || '',
-      skipReason:      m.skip_reason           || null,
-      confidence:      Math.max(0.75, 0.95 - i * 0.02),
-      priority:        m.priority              || 'CORE GAP',
-      savingsPct:      m.estimated_savings_pct || 0,
-      course_url:      m.course_url            || null,      // ← FIXED
-      course_provider: m.course_provider       || 'Coursera', // ← FIXED
-      questions: [
-        { q: `Do you already have hands-on experience with ${m.title}?`,     weight: 0.6 },
-        { q: `Can you confidently explain the core concepts of ${m.title}?`, weight: 0.4 },
-      ],
-    })),
+    pathway: (data.modules || []).map((m, i) => {
+      const courseUrl      = m.course_url      || null
+      const courseProvider = m.course_provider || 'Coursera'
+
+      return {
+        id:              i + 1,
+        title:           m.title,
+        module_id:       m.module_id,
+        provider:        courseProvider,
+        duration:        `${m.hours}h`,
+        prereqs:         [],
+        reason:          m.why_included          || '',
+        skipReason:      m.skip_reason           || null,
+        confidence:      Math.max(0.75, 0.95 - i * 0.02),
+        priority:        m.priority              || 'CORE GAP',
+        savingsPct:      m.estimated_savings_pct || 0,
+        course_url:      courseUrl,
+        course_provider: courseProvider,
+        questions: [
+          { q: `Do you already have hands-on experience with ${m.title}?`,     weight: 0.6 },
+          { q: `Can you confidently explain the core concepts of ${m.title}?`, weight: 0.4 },
+        ],
+      }
+    }),
   }
 }
 
