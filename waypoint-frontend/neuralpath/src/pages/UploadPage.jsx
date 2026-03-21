@@ -179,7 +179,7 @@ export default function UploadPage() {
       <button
         onClick={handleSubmit}
         disabled={loading}
-        className="w-full flex items-center justify-center gap-2 py-4 aurora-gradient text-white font-display font-700 text-base rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
+        className="w-full flex items-center justify-center gap-2 py-4 bg-accentDark text-white font-display font-700 text-base rounded-xl hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg"
       >
         {loading
           ? <><Loader2 size={18} className="animate-spin" />{loadingMsg}</>
