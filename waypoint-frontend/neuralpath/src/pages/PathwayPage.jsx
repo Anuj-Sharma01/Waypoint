@@ -2,6 +2,8 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { ArrowLeft, ChevronDown, ChevronUp, Clock, CheckCircle2, SkipForward, Trophy, ExternalLink } from 'lucide-react'
 
+const STORAGE_KEY = 'waypoint_result'
+
 function SkillBadge({ label, variant='gap' }) {
   const s = {
     current: 'bg-mintbg text-accentDark border-accent/30',
@@ -20,7 +22,7 @@ function ReasoningTrace({ module, open, onToggle }) {
       {open && (
         <div className="px-3 pb-3 text-xs font-mono space-y-1.5 border-t border-softborder bg-white">
           <div className="text-dim pt-2">confidence: <span className="text-accentDark font-700">{(module.confidence*100).toFixed(0)}%</span></div>
-          <div className="text-dim">prereqs: <span className="text-ink">[{module.prereqs.join(', ')||'none'}]</span></div>
+          <div className="text-dim">prereqs: <span className="text-ink">[{module.prereqs?.join(', ')||'none'}]</span></div>
           <div className="text-dim">reason: <span className="text-ink">"{module.reason}"</span></div>
           {module.skipReason && <div className="text-dim">skip: <span className="text-skyDark">"{module.skipReason}"</span></div>}
         </div>
@@ -64,7 +66,7 @@ function ModuleCard({ module, index, moduleState, onComplete, onSkip, onAnswer, 
     }`}>
       <button onClick={onToggleExpand} className="w-full flex items-center gap-3 p-5 hover:bg-soft/60 transition-colors text-left">
         <div className={`w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 border-2 transition-all ${
-          done    ? 'bg-mintbg border-accent/50 text-accentDark'
+          done     ? 'bg-mintbg border-accent/50 text-accentDark'
           :skipped ? 'bg-panel2 border-sky/40 text-skyDark'
           :expanded? 'bg-mintbg border-accent/40 text-accentDark'
           :          'bg-soft border-softborder text-muted'
@@ -76,7 +78,6 @@ function ModuleCard({ module, index, moduleState, onComplete, onSkip, onAnswer, 
             <span className="font-display font-700 text-sm text-ink">{module.title}</span>
             {done    && <span className="text-xs font-mono text-accentDark border border-accent/30 bg-mintbg px-2 py-0.5 rounded-full">done</span>}
             {skipped && <span className="text-xs font-mono text-skyDark border border-sky/30 bg-panel2 px-2 py-0.5 rounded-full">skipped</span>}
-            {/* ── Priority badge ── */}
             {module.priority && (
               <span className={`text-xs font-mono px-2 py-0.5 rounded-full border ${
                 module.priority === 'PREREQUISITE' ? 'bg-soft border-softborder text-muted' :
@@ -87,14 +88,9 @@ function ModuleCard({ module, index, moduleState, onComplete, onSkip, onAnswer, 
             )}
           </div>
           <div className="flex items-center gap-2 mt-1 flex-wrap">
-            {/* ── Show provider from Coursera dataset ── */}
             <span className="text-xs font-mono text-muted">{module.course_provider || module.provider || 'Coursera'}</span>
             <span className="text-muted text-xs">·</span>
             <span className="flex items-center gap-1 text-xs font-mono text-muted"><Clock size={9}/> {module.duration}</span>
-            {module.prereqs?.length > 0 && (
-              <><span className="text-muted text-xs">·</span>
-              <span className="text-xs font-mono text-muted">needs {module.prereqs.length} prereq{module.prereqs.length>1?'s':''}</span></>
-            )}
           </div>
         </div>
         <ChevronDown size={14} className={`text-muted flex-shrink-0 transition-transform ${expanded?'rotate-180':''}`}/>
@@ -118,7 +114,6 @@ function ModuleCard({ module, index, moduleState, onComplete, onSkip, onAnswer, 
 
           <ReasoningTrace module={module} open={traceOpen} onToggle={onToggleTrace}/>
 
-          {/* ── Coursera course link ─────────────────────────────────────── */}
           {module.course_url && (
             <a
               href={module.course_url}
@@ -152,8 +147,14 @@ function ModuleCard({ module, index, moduleState, onComplete, onSkip, onAnswer, 
 export default function PathwayPage() {
   const { state } = useLocation()
   const navigate  = useNavigate()
-  const result    = state?.result || JSON.parse(sessionStorage.getItem('waypoint_result') || 'null')
-  const pathway   = result?.pathway || []
+
+  // Restore from sessionStorage if navigated away and came back
+  const result = state?.result || (() => {
+    try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || 'null') }
+    catch { return null }
+  })()
+
+  const pathway = result?.pathway || []
 
   const [moduleStates, setModuleStates] = useState(() =>
     Object.fromEntries(pathway.map((m,i) => [m.id, { done:false, skipped:false, expanded:i===0, traceOpen:false, answers:{} }]))
@@ -223,15 +224,12 @@ export default function PathwayPage() {
           <Trophy size={28} className="text-accentDark mx-auto mb-3"/>
           <h2 className="font-display font-700 text-xl text-ink mb-1">Pathway complete! 🎉</h2>
           <p className="text-dim text-sm mb-4">You've closed the gap to {result.targetRole}. Time to build something.</p>
-          <div className="flex gap-3 justify-center flex-wrap">
-            <button onClick={() => navigate('/certificate', { state: { result } })} className="px-5 py-2 btn-gradient text-white text-sm font-mono font-700 rounded-xl shadow-sm">Get Certificate 🎓</button>
-          </div>
+          <button onClick={() => navigate('/certificate', { state: { result } })} className="px-5 py-2 btn-gradient text-white text-sm font-mono font-700 rounded-xl shadow-sm">Get Certificate 🎓</button>
         </div>
       )}
 
       <div className="grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-3">
-          {/* Progress */}
           <div className="frosted rounded-2xl p-5 mb-5 shadow-sm">
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-mono text-muted uppercase tracking-wider">Progress</span>
@@ -259,7 +257,6 @@ export default function PathwayPage() {
           ))}
         </div>
 
-        {/* Sidebar */}
         <div>
           <div className="frosted rounded-2xl p-5 sticky top-24 shadow-sm">
             <h3 className="font-display font-700 text-sm mb-4 text-muted uppercase tracking-wider">Skill Map</h3>

@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { Upload, FileText, Briefcase, ArrowRight, Loader2, AlertCircle } from 'lucide-react'
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const STORAGE_KEY = 'waypoint_result'
 
 const LOADING_MESSAGES = [
   'Extracting skills from resume…',
   'Building prerequisite graph…',
   'Running Dijkstra gap traversal…',
-  'Grounding modules to catalog…',
+  'Grounding modules to Coursera catalog…',
   'Generating reasoning traces…',
 ]
 
@@ -22,11 +23,42 @@ function extractRoleFromJD(jdText) {
       const after = clean.split(':')[1]?.trim()
       if (after) return after
     }
-    if (clean.length < 60 && !clean.includes('.') && !clean.includes(',')) {
-      return clean
-    }
+    if (clean.length < 60 && !clean.includes('.') && !clean.includes(',')) return clean
   }
   return lines[0]?.trim().slice(0, 60) || 'Software Engineer'
+}
+
+function transformResponse(data) {
+  return {
+    name:           'Candidate',
+    targetRole:     data.target_role,
+    currentSkills:  data.existing_skills || [],
+    partialSkills:  data.partial_skills  || [],
+    gapSkills:      data.skill_gaps      || [],
+    totalHours:     data.total_hours,
+    standardHours:  data.standard_hours,
+    timeSavedPct:   data.time_saved_pct,
+    reasoningTrace: data.reasoning_trace || [],
+    pathway: (data.modules || []).map((m, i) => ({
+      id:              i + 1,
+      title:           m.title,
+      module_id:       m.module_id,
+      provider:        m.course_provider || 'Coursera',
+      duration:        `${m.hours}h`,
+      prereqs:         [],
+      reason:          m.why_included          || '',
+      skipReason:      m.skip_reason           || null,
+      confidence:      Math.max(0.75, 0.95 - i * 0.02),
+      priority:        m.priority              || 'CORE GAP',
+      savingsPct:      m.estimated_savings_pct || 0,
+      course_url:      m.course_url            || null,
+      course_provider: m.course_provider       || 'Coursera',
+      questions: [
+        { q: `Do you already have hands-on experience with ${m.title}?`,     weight: 0.6 },
+        { q: `Can you confidently explain the core concepts of ${m.title}?`, weight: 0.4 },
+      ],
+    })),
+  }
 }
 
 export default function UploadPage() {
@@ -45,13 +77,10 @@ export default function UploadPage() {
     const file = e.dataTransfer?.files?.[0] || e.target.files?.[0]
     if (!file) return
     setResumeFile(file.name)
-
     if (file.name.endsWith('.pdf')) {
-      // Store PDF file for backend upload
       setPdfFile(file)
-      setResumeText('') // clear text box
+      setResumeText('')
     } else {
-      // Read TXT file directly
       setPdfFile(null)
       const reader = new FileReader()
       reader.onload = (ev) => setResumeText(ev.target.result)
@@ -77,39 +106,26 @@ export default function UploadPage() {
       let result
 
       if (pdfFile) {
-        // Send PDF as multipart form
         const formData = new FormData()
         formData.append('file', pdfFile)
         formData.append('target_role', targetRole)
         formData.append('job_description', jdText)
-
-        const res = await fetch(`${BASE_URL}/pathway`, {
-          method: 'POST',
-          body: formData,
-        })
+        const res = await fetch(`${BASE_URL}/pathway`, { method: 'POST', body: formData })
         if (!res.ok) throw new Error(await res.text() || `HTTP ${res.status}`)
-        const data = await res.json()
-        result = transformResponse(data)
+        result = transformResponse(await res.json())
       } else {
-        // Send plain text
         const res = await fetch(`${BASE_URL}/pathway/text`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            resume_text:     resumeText,
-            target_role:     targetRole,
-            job_description: jdText,
-          }),
+          body: JSON.stringify({ resume_text: resumeText, target_role: targetRole, job_description: jdText }),
         })
         if (!res.ok) throw new Error(await res.text() || `HTTP ${res.status}`)
-        const data = await res.json()
-        result = transformResponse(data)
+        result = transformResponse(await res.json())
       }
 
       clearInterval(msgInterval)
-      // Persist result so any page (Skill Test, Courses, etc.) can read real skills
-      localStorage.setItem('waypoint_result', JSON.stringify(result))
-      sessionStorage.setItem('waypoint_result', JSON.stringify(result))
+      // Save to sessionStorage so pathway persists across navigation
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(result))
       navigate('/pathway', { state: { result } })
     } catch (err) {
       clearInterval(msgInterval)
@@ -179,65 +195,22 @@ export default function UploadPage() {
         </div>
       )}
 
-<button
-  onClick={handleSubmit}
-  disabled={loading}
-  style={{ background: 'linear-gradient(135deg, #059669, #0369a1)' }}
-  className="
-    w-full flex items-center justify-center gap-2
-    py-4 rounded-xl shadow-lg
-    text-white font-display font-700 text-base
-    hover:opacity-90 transition-all
-    disabled:opacity-50 disabled:cursor-not-allowed
-  "
->
-  {loading ? (
-    <>
-      <Loader2 size={18} className="animate-spin" />
-      {loadingMsg}
-    </>
-  ) : (
-    <>
-      Generate Learning Pathway
-      <ArrowRight size={18} />
-    </>
-  )}
-</button>
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        style={{ background: 'linear-gradient(135deg, #059669, #0369a1)' }}
+        className="w-full flex items-center justify-center gap-2 py-4 rounded-xl shadow-lg text-white font-display font-700 text-base hover:opacity-90 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {loading ? (
+          <><Loader2 size={18} className="animate-spin" />{loadingMsg}</>
+        ) : (
+          <>Generate Learning Pathway <ArrowRight size={18} /></>
+        )}
+      </button>
 
       <p className="text-center text-xs font-mono text-muted mt-4">
         Tip: Start your job description with the role title on the first line
       </p>
     </div>
   )
-}
-
-function transformResponse(data) {
-  return {
-    name:           'Candidate',
-    targetRole:     data.target_role,
-    currentSkills:  data.existing_skills || [],
-    partialSkills:  data.partial_skills  || [],
-    gapSkills:      data.skill_gaps      || [],
-    totalHours:     data.total_hours,
-    standardHours:  data.standard_hours,
-    timeSavedPct:   data.time_saved_pct,
-    reasoningTrace: data.reasoning_trace || [],
-    pathway: (data.modules || []).map((m, i) => ({
-      id:         i + 1,
-      title:      m.title,
-      module_id:  m.module_id,
-      provider:   'Waypoint',
-      duration:   `${m.hours}h`,
-      prereqs:    [],
-      reason:     m.why_included     || '',
-      skipReason: m.skip_reason      || null,
-      confidence: Math.max(0.75, 0.95 - i * 0.02),
-      priority:   m.priority         || 'CORE GAP',
-      savingsPct: m.estimated_savings_pct || 0,
-      questions: [
-        { q: `Do you already have hands-on experience with ${m.title}?`,     weight: 0.6 },
-        { q: `Can you confidently explain the core concepts of ${m.title}?`, weight: 0.4 },
-      ],
-    })),
-  }
 }
