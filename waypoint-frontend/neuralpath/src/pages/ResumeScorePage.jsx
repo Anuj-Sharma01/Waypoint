@@ -1,27 +1,13 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowRight, Loader2, FileText, TrendingUp, AlertCircle, CheckCircle2, Info } from 'lucide-react'
-
-const MOCK_SCORES = {
-  overall: 74,
-  breakdown: [
-    { label: 'Skills Relevance',    score: 82, max: 100, tip: 'Good match with common ML/Data roles. Add PyTorch, Docker, and MLOps to push this above 90.' },
-    { label: 'Experience Depth',    score: 68, max: 100, tip: 'Projects are listed but lack measurable impact. Add numbers — "improved accuracy by 12%" beats "built a model".' },
-    { label: 'Education & Certs',   score: 80, max: 100, tip: 'Solid foundation. A Kaggle competition or cloud cert (AWS/GCP) would add significant weight.' },
-    { label: 'Keyword Density',     score: 71, max: 100, tip: 'Missing: "A/B testing", "feature engineering", "model deployment". Add these where true.' },
-    { label: 'Structure & Clarity', score: 90, max: 100, tip: 'Clean, readable format. Recruiters can parse this in 6 seconds.' },
-  ],
-  strengths: ['Strong Python proficiency', 'SQL and data analysis experience', 'Clear resume structure'],
-  gaps: ['No MLOps or deployment experience', 'Missing cloud platform skills', 'No measurable business impact in project descriptions'],
-  verdict: 'Competitive for junior-mid data roles. One targeted upskill sprint away from senior ML positions.',
-}
+import { ArrowRight, Loader2, TrendingUp, AlertCircle, CheckCircle2, Info } from 'lucide-react'
+import { scoreResume } from '../api'
 
 function ScoreRing({ score, size = 120 }) {
   const r = (size - 16) / 2
   const circ = 2 * Math.PI * r
   const pct = score / 100
   const color = score >= 80 ? '#34d399' : score >= 60 ? '#38bdf8' : '#f9a070'
-
   return (
     <svg width={size} height={size} style={{ transform: 'rotate(-90deg)' }}>
       <circle cx={size/2} cy={size/2} r={r} fill="none" stroke="#e0f2fe" strokeWidth="8" />
@@ -30,7 +16,7 @@ function ScoreRing({ score, size = 120 }) {
         strokeLinecap="round" style={{ transition: 'stroke-dashoffset 1s ease' }}
       />
       <text x={size/2} y={size/2} textAnchor="middle" dominantBaseline="central"
-        style={{ transform: 'rotate(90deg)', transformOrigin: `${size/2}px ${size/2}px`, fill: color, fontSize: '22px', fontWeight: 700, fontFamily: '"Playfair Display", serif' }}
+        style={{ transform: `rotate(90deg)`, transformOrigin: `${size/2}px ${size/2}px`, fill: color, fontSize: '22px', fontWeight: 700 }}
       >{score}</text>
     </svg>
   )
@@ -38,16 +24,39 @@ function ScoreRing({ score, size = 120 }) {
 
 export default function ResumeScorePage() {
   const [resumeText, setResumeText] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState(null)
+  const [jdText, setJdText]         = useState('')
+  const [loading, setLoading]       = useState(false)
+  const [result, setResult]         = useState(null)
+  const [error, setError]           = useState('')
   const navigate = useNavigate()
 
   const handleScore = async () => {
     if (!resumeText.trim()) return
     setLoading(true)
-    await new Promise(r => setTimeout(r, 2200))
-    setResult(MOCK_SCORES)
-    setLoading(false)
+    setError('')
+    try {
+      const data = await scoreResume(resumeText, jdText)
+      // Transform backend response to UI shape
+      setResult({
+        overall: data.ats_score,
+        overallTen: data.overall_score,
+        breakdown: [
+          { label: 'Keyword Match',     score: data.ats_score,                                       tip: `${data.keywords_found}/${data.keywords_total} keywords matched from job description.` },
+          { label: 'Skills Coverage',   score: Math.min(100, Math.round(data.overall_score * 10)),   tip: data.improvements[0] || 'Good skills coverage.' },
+          { label: 'Content Quality',   score: Math.min(100, Math.round(data.overall_score * 9.5)), tip: data.strengths[0] || 'Strong content.' },
+        ],
+        strengths: data.strengths,
+        gaps: data.improvements,
+        keywords: data.keyword_matches,
+        verdict: data.overall_score >= 8 ? 'Strong resume — well aligned with the role.'
+                : data.overall_score >= 6 ? 'Good foundation — a few targeted improvements will make this stand out.'
+                : 'Needs work — focus on the gaps below to improve your match rate.',
+      })
+    } catch (err) {
+      setError(err.message || 'Something went wrong. Is the backend running?')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -56,29 +65,35 @@ export default function ResumeScorePage() {
         <h1 className="font-display text-4xl font-700 text-ink mb-2">
           Resume <span className="text-gradient">Score</span>
         </h1>
-        <p className="text-dim text-base">Paste your resume and get an AI score out of 100 with actionable feedback.</p>
+        <p className="text-dim text-base">Paste your resume and get an AI score with keyword matching and ATS analysis.</p>
       </div>
 
       {!result ? (
         <div className="space-y-4">
-          <textarea
-            value={resumeText}
-            onChange={e => setResumeText(e.target.value)}
+          <textarea value={resumeText} onChange={e => setResumeText(e.target.value)}
             placeholder="Paste your resume text here..."
-            className="w-full frosted rounded-2xl p-5 text-sm text-ink placeholder:text-muted font-body focus:outline-none resize-none h-64 shadow-sm border border-softborder"
+            className="w-full frosted rounded-2xl p-5 text-sm text-ink placeholder:text-muted font-body focus:outline-none resize-none h-48 shadow-sm border border-softborder"
           />
+          <textarea value={jdText} onChange={e => setJdText(e.target.value)}
+            placeholder="Optional: paste the job description for keyword matching..."
+            className="w-full frosted rounded-2xl p-5 text-sm text-ink placeholder:text-muted font-body focus:outline-none resize-none h-32 shadow-sm border border-softborder"
+          />
+          {error && <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 border border-red-200 rounded-xl p-3"><AlertCircle size={14}/>{error}</div>}
           <button onClick={handleScore} disabled={loading || !resumeText.trim()}
             className="w-full flex items-center justify-center gap-2 py-4 text-white font-display font-700 text-base rounded-xl transition-all disabled:opacity-40 shadow-lg btn-gradient"
           >
-            {loading ? <><Loader2 size={18} className="animate-spin" />Analyzing resume…</> : <>Score My Resume <TrendingUp size={18} /></>}
+            {loading ? <><Loader2 size={18} className="animate-spin"/>Analyzing resume…</> : <>Score My Resume <TrendingUp size={18}/></>}
           </button>
         </div>
       ) : (
         <div className="space-y-5">
-          {/* Overall score */}
           <div className="frosted rounded-2xl p-6 shadow-sm flex items-center gap-8 flex-wrap">
             <div className="flex flex-col items-center">
-              <ScoreRing score={result.overall} size={120} />
+              <ScoreRing score={result.overall} size={120}/>
+              <div className="text-xs font-mono text-muted mt-2 uppercase tracking-wider">ATS Score</div>
+            </div>
+            <div className="flex flex-col items-center">
+              <div className="text-5xl font-display font-800" style={{color:'#34d399'}}>{result.overallTen}<span className="text-2xl text-muted">/10</span></div>
               <div className="text-xs font-mono text-muted mt-2 uppercase tracking-wider">Overall Score</div>
             </div>
             <div className="flex-1 min-w-[200px]">
@@ -86,13 +101,12 @@ export default function ResumeScorePage() {
                 {result.overall >= 80 ? 'Strong resume' : result.overall >= 60 ? 'Good foundation' : 'Needs work'}
               </div>
               <p className="text-dim text-sm leading-relaxed">{result.verdict}</p>
-              <button onClick={() => navigate('/upload')}
-                className="mt-4 flex items-center gap-2 px-4 py-2 btn-gradient text-white text-sm font-mono font-700 rounded-lg shadow-sm"
-              >Close the gaps → <ArrowRight size={13} /></button>
+              <button onClick={() => navigate('/upload')} className="mt-4 flex items-center gap-2 px-4 py-2 btn-gradient text-white text-sm font-mono font-700 rounded-lg shadow-sm">
+                Close the gaps → <ArrowRight size={13}/>
+              </button>
             </div>
           </div>
 
-          {/* Breakdown */}
           <div className="frosted rounded-2xl p-6 shadow-sm">
             <h3 className="font-display font-700 text-base text-ink mb-4">Score Breakdown</h3>
             <div className="space-y-4">
@@ -104,11 +118,11 @@ export default function ResumeScorePage() {
                   </div>
                   <div className="h-2 bg-white/50 rounded-full overflow-hidden border border-softborder mb-1">
                     <div className="h-full rounded-full transition-all duration-700"
-                      style={{ width: `${score}%`, background: score>=80?'linear-gradient(90deg,#34d399,#38bdf8)':score>=60?'linear-gradient(90deg,#38bdf8,#a78bfa)':'linear-gradient(90deg,#f9a070,#38bdf8)' }}
+                      style={{ width:`${score}%`, background: score>=80?'linear-gradient(90deg,#34d399,#38bdf8)':score>=60?'linear-gradient(90deg,#38bdf8,#a78bfa)':'linear-gradient(90deg,#f9a070,#38bdf8)' }}
                     />
                   </div>
                   <div className="flex items-start gap-1.5">
-                    <Info size={10} className="text-muted mt-0.5 flex-shrink-0" />
+                    <Info size={10} className="text-muted mt-0.5 flex-shrink-0"/>
                     <p className="text-xs text-muted leading-relaxed">{tip}</p>
                   </div>
                 </div>
@@ -116,7 +130,19 @@ export default function ResumeScorePage() {
             </div>
           </div>
 
-          {/* Strengths & gaps */}
+          {result.keywords && result.keywords.length > 0 && (
+            <div className="frosted rounded-2xl p-6 shadow-sm">
+              <h3 className="font-display font-700 text-base text-ink mb-4">Keyword Analysis</h3>
+              <div className="flex flex-wrap gap-2">
+                {result.keywords.map(k => (
+                  <span key={k.keyword} className={`px-2.5 py-1 rounded-full text-xs font-mono border ${k.found ? 'bg-mintbg border-accent/30 text-accentDark' : 'bg-red-50 border-red-200 text-red-500'}`}>
+                    {k.found ? '✓' : '✗'} {k.keyword}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
           <div className="grid md:grid-cols-2 gap-4">
             <div className="frosted rounded-2xl p-5 shadow-sm">
               <h3 className="font-display font-700 text-sm text-accentDark mb-3 flex items-center gap-2"><CheckCircle2 size={14}/> Strengths</h3>
