@@ -350,6 +350,7 @@ Results saved to `onet_data/validated_pathways.json`.
 | Frontend | React 18 + Tailwind CSS + Vite |
 | PDF Parsing | pdfplumber + python-docx |
 | Containerization | Docker + Docker Compose |
+| AI Development Assistant | Claude by Anthropic (pair programming throughout development) |
 
 ---
 
