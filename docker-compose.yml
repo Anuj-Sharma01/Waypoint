@@ -18,7 +18,7 @@ services:
 
   frontend:
     build:
-      context: ./waypoint-frontend
+      context: ./waypoint-frontend/neuralpath
       dockerfile: Dockerfile
     ports:
       - "5173:5173"
