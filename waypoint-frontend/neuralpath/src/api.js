@@ -9,7 +9,6 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
  * Calls POST /pathway/text and transforms response to frontend shape.
  */
 export async function analyzeGap(resumeText, jobDescription) {
-  // Extract target role from first line of job description
   const targetRole = extractRoleFromJD(jobDescription)
 
   const res = await fetch(`${BASE_URL}/pathway/text`, {
@@ -29,7 +28,6 @@ export async function analyzeGap(resumeText, jobDescription) {
 
   const data = await res.json()
 
-  // Transform backend response shape → frontend shape
   return {
     name:           'Candidate',
     targetRole:     data.target_role,
@@ -41,69 +39,51 @@ export async function analyzeGap(resumeText, jobDescription) {
     timeSavedPct:   data.time_saved_pct,
     reasoningTrace: data.reasoning_trace || [],
     pathway: (data.modules || []).map((m, i) => ({
-      id:         i + 1,
-      title:      m.title,
-      module_id:  m.module_id,
-      provider:   'Waypoint',
-      duration:   `${m.hours}h`,
-      prereqs:    [],
-      reason:     m.why_included     || '',
-      skipReason: m.skip_reason      || null,
-      confidence: Math.max(0.75, 0.95 - i * 0.02),
-      priority:   m.priority         || 'CORE GAP',
-      savingsPct: m.estimated_savings_pct || 0,
+      id:              i + 1,
+      title:           m.title,
+      module_id:       m.module_id,
+      provider:        m.course_provider || 'Coursera',
+      duration:        `${m.hours}h`,
+      prereqs:         [],
+      reason:          m.why_included          || '',
+      skipReason:      m.skip_reason           || null,
+      confidence:      Math.max(0.75, 0.95 - i * 0.02),
+      priority:        m.priority              || 'CORE GAP',
+      savingsPct:      m.estimated_savings_pct || 0,
+      course_url:      m.course_url            || null,      // ← FIXED
+      course_provider: m.course_provider       || 'Coursera', // ← FIXED
       questions: [
-        { q: `Do you already have hands-on experience with ${m.title}?`,      weight: 0.6 },
-        { q: `Can you confidently explain the core concepts of ${m.title}?`,  weight: 0.4 },
+        { q: `Do you already have hands-on experience with ${m.title}?`,     weight: 0.6 },
+        { q: `Can you confidently explain the core concepts of ${m.title}?`, weight: 0.4 },
       ],
     })),
   }
 }
 
-/**
- * Extract a role title from the job description text.
- * Uses the first short line that looks like a job title.
- */
 function extractRoleFromJD(jdText) {
   if (!jdText || !jdText.trim()) return 'Software Engineer'
-
   const lines = jdText.trim().split('\n').filter(l => l.trim())
-
   for (const line of lines.slice(0, 5)) {
     const clean = line.trim()
     const lower = clean.toLowerCase()
-
-    // Explicit label patterns
     if (lower.includes('role:') || lower.includes('position:') || lower.includes('title:')) {
       const after = clean.split(':')[1]?.trim()
       if (after) return after
     }
-
-    // Short line with no punctuation = likely a job title
     if (clean.length < 60 && !clean.includes('.') && !clean.includes(',')) {
       return clean
     }
   }
-
-  // Fallback: first line truncated
   return lines[0]?.trim().slice(0, 60) || 'Software Engineer'
 }
 
-/**
- * Get the full course catalog.
- */
 export async function getCatalog(domain = null) {
-  const url = domain
-    ? `${BASE_URL}/catalog?domain=${domain}`
-    : `${BASE_URL}/catalog`
+  const url = domain ? `${BASE_URL}/catalog?domain=${domain}` : `${BASE_URL}/catalog`
   const res = await fetch(url)
   if (!res.ok) throw new Error(`HTTP ${res.status}`)
   return res.json()
 }
 
-/**
- * Health check — verify backend is reachable.
- */
 export async function healthCheck() {
   try {
     const res = await fetch(`${BASE_URL}/health`)
@@ -113,11 +93,6 @@ export async function healthCheck() {
   }
 }
 
-/**
- * Score a resume against an optional job description.
- * Calls POST /score and returns ATS + quality metrics.
- * Response shape: { overall_score, ats_score, keyword_matches, keywords_found, keywords_total, strengths, improvements }
- */
 export async function scoreResume(resumeText, jobDescription = '') {
   const res = await fetch(`${BASE_URL}/score`, {
     method: 'POST',
@@ -128,16 +103,6 @@ export async function scoreResume(resumeText, jobDescription = '') {
   return res.json()
 }
 
-// ─── Adaptive Skill Assessment ────────────────────────────────────────────────
-
-/**
- * Generate the next adaptive question.
- * Sends full answer history + current difficulty to backend (Grok/LLM).
- * Backend decides what concept to test next and at what depth.
- *
- * Payload: { skill, difficulty, history: [{correct, difficulty}], questionNumber }
- * Response: { text, options: [str x4], correct: 0-3, explanation, difficulty }
- */
 export async function generateNextAdaptiveQuestion({ skill, difficulty, history, questionNumber }) {
   try {
     const res = await fetch(`${BASE_URL}/skill-test/adaptive`, {
@@ -147,7 +112,6 @@ export async function generateNextAdaptiveQuestion({ skill, difficulty, history,
     })
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data = await res.json()
-    // Normalise — backend may return 'question' or 'text'
     return {
       text:        data.text || data.question,
       options:     data.options,
@@ -160,11 +124,6 @@ export async function generateNextAdaptiveQuestion({ skill, difficulty, history,
   }
 }
 
-/**
- * Fallback question generator — used when backend is offline.
- * Generates contextually varied questions based on difficulty and question number
- * so the test still feels progressive even without a live API.
- */
 function generateFallbackQuestion(skill, difficulty, questionNum) {
   const pools = {
     easy: [
@@ -188,7 +147,7 @@ function generateFallbackQuestion(skill, difficulty, questionNum) {
           'It only works on Windows',
         ],
         correct: 1,
-        explanation: `A structured, principled approach is the hallmark of ${skill} — it gives practitioners a reliable framework.`,
+        explanation: `A structured, principled approach is the hallmark of ${skill}.`,
       },
     ],
     medium: [
@@ -201,7 +160,7 @@ function generateFallbackQuestion(skill, difficulty, questionNum) {
           'Always rewriting from scratch',
         ],
         correct: 1,
-        explanation: 'Production ${skill} work demands reliability. Testing and edge case handling separate professional work from hobby projects.',
+        explanation: `Production ${skill} work demands reliability and proper edge case handling.`,
       },
       {
         text: `What differentiates an intermediate ${skill} practitioner from a beginner?`,
@@ -212,7 +171,7 @@ function generateFallbackQuestion(skill, difficulty, questionNum) {
           'Writing longer code',
         ],
         correct: 2,
-        explanation: `Knowing trade-offs and limitations — not just how to use ${skill}, but when not to — is the mark of intermediate mastery.`,
+        explanation: `Knowing trade-offs and limitations is the mark of intermediate mastery in ${skill}.`,
       },
     ],
     hard: [
@@ -225,7 +184,7 @@ function generateFallbackQuestion(skill, difficulty, questionNum) {
           'Disable all logging',
         ],
         correct: 1,
-        explanation: 'Premature optimisation is the root of all evil. Profile first — measure, identify the real bottleneck, then optimise with evidence.',
+        explanation: 'Profile first — measure, identify the real bottleneck, then optimise with evidence.',
       },
       {
         text: `What is a common architectural mistake when scaling ${skill} solutions?`,
@@ -236,7 +195,7 @@ function generateFallbackQuestion(skill, difficulty, questionNum) {
           'Documenting the codebase',
         ],
         correct: 2,
-        explanation: 'Tight coupling is the #1 enemy of scalability. Decoupled components can be scaled, replaced, and maintained independently.',
+        explanation: 'Tight coupling is the #1 enemy of scalability.',
       },
     ],
     expert: [
@@ -249,7 +208,7 @@ function generateFallbackQuestion(skill, difficulty, questionNum) {
           'Disable error handling to improve performance',
         ],
         correct: 1,
-        explanation: 'Expert-level resilience requires circuit breakers to stop cascade failures, exponential backoff for retries, and idempotency to safely replay failed operations.',
+        explanation: 'Circuit breakers, exponential backoff, and idempotency are the three pillars of fault tolerance.',
       },
       {
         text: `When evaluating whether to adopt a new approach in ${skill}, what is the most rigorous method?`,
@@ -260,12 +219,12 @@ function generateFallbackQuestion(skill, difficulty, questionNum) {
           'Ask for the opinion of a single expert',
         ],
         correct: 2,
-        explanation: 'Expert decision-making is evidence-based: define success metrics first, benchmark both approaches, and let data — not opinions — drive the decision.',
+        explanation: 'Expert decision-making is evidence-based: define metrics first, benchmark both approaches.',
       },
     ],
   }
 
   const pool = pools[difficulty] || pools.medium
-  const q = pool[questionNum % pool.length]
+  const q    = pool[questionNum % pool.length]
   return { ...q, difficulty }
 }
