@@ -20,7 +20,7 @@ cd Waypoint
 
 **Windows PowerShell:**
 ```powershell
-"GROQ_API_KEY=gsk_YOUR_KEY_HERE" | Out-File -FilePath waypoint-backend/.env -Encoding utf8 -NoNewline
+"GROQ_API_KEY=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" | Out-File -FilePath waypoint-backend/.env -Encoding utf8 -NoNewline
 ```
 
 **Mac/Linux Terminal:**
