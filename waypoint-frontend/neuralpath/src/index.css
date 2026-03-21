@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body { @apply bg-soft text-ink font-body antialiased; }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #34d399 0%, #38bdf8 50%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .btn-gradient {
+    background: linear-gradient(135deg, #34d399 0%, #38bdf8 60%, #a78bfa 100%);
+  }
+  .btn-gradient:hover {
+    background: linear-gradient(135deg, #059669 0%, #0369a1 60%, #6d28d9 100%);
+  }
+  .progress-gradient {
+    background: linear-gradient(90deg, #34d399, #38bdf8, #a78bfa);
+  }
+  .glass {
+    background: rgba(240, 253, 249, 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #f0fdf9; }
+::-webkit-scrollbar-thumb { background: #a5f3fc; border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: #34d399; }
+
+/* Frosted glass cards — sit on top of particle+gradient bg */
+.frosted {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(165, 243, 252, 0.4);
+}
+.frosted-dark {
+  background: rgba(240, 253, 249, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
