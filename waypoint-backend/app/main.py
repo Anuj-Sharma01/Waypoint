@@ -3,7 +3,7 @@ load_dotenv()
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import extract, pathway, catalog, score, skill_test
+from app.routers import extract, pathway, catalog, score, skill_test, courses
 
 app = FastAPI(
     title="Waypoint API",
@@ -24,6 +24,7 @@ app.include_router(pathway.router,  prefix="/pathway",  tags=["Pathway"])
 app.include_router(catalog.router,  prefix="/catalog",  tags=["Catalog"])
 app.include_router(score.router, prefix="/score", tags=["Score"])
 app.include_router(skill_test.router, prefix="/skill-test", tags=["SkillTest"])
+app.include_router(courses.router, prefix="/courses", tags=["Courses"])
 
 @app.get("/health")
 def health():
